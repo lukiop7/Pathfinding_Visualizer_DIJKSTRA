@@ -1,0 +1,9 @@
+E:\STUDIA\Sem5\APL_PROJ\PathFinderDijkstra\PathFinderDijkstra\x64\Debug\PathFinderDijkstra.exe.config
+E:\STUDIA\Sem5\APL_PROJ\PathFinderDijkstra\PathFinderDijkstra\x64\Debug\PathFinderDijkstra.exe
+E:\STUDIA\Sem5\APL_PROJ\PathFinderDijkstra\PathFinderDijkstra\x64\Debug\PathFinderDijkstra.pdb
+E:\STUDIA\Sem5\APL_PROJ\PathFinderDijkstra\PathFinderDijkstra\obj\Debug\PathFinderDijkstra.Properties.Resources.resources
+E:\STUDIA\Sem5\APL_PROJ\PathFinderDijkstra\PathFinderDijkstra\obj\Debug\PathFinderDijkstra.csproj.GenerateResource.cache
+E:\STUDIA\Sem5\APL_PROJ\PathFinderDijkstra\PathFinderDijkstra\obj\Debug\PathFinderDijkstra.exe
+E:\STUDIA\Sem5\APL_PROJ\PathFinderDijkstra\PathFinderDijkstra\obj\Debug\PathFinderDijkstra.pdb
+E:\STUDIA\Sem5\APL_PROJ\PathFinderDijkstra\PathFinderDijkstra\obj\Debug\PathFinderDijkstra.csprojAssemblyReference.cache
+E:\STUDIA\Sem5\APL_PROJ\PathFinderDijkstra\PathFinderDijkstra\obj\Debug\PathFinderDijkstra.Form1.resources
