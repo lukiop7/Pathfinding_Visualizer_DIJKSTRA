@@ -1,0 +1,8 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/PathFinderDijkstra/.vs/PathFinderDijkstra/v16/Server/sqlite3
+/PathFinderDijkstra/.vs/PathFinderDijkstra/v16/Solution.VC.db-shm
+/PathFinderDijkstra/.vs/PathFinderDijkstra/v16/Browse.VC.opendb
+/PathFinderDijkstra/.vs/PathFinderDijkstra/v16/Solution.VC.db-wal
