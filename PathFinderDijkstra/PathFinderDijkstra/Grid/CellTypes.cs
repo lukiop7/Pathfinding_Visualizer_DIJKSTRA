@@ -14,8 +14,8 @@ namespace PathFinderDijkstra.Grid
             A = 3,
             B = 4,
             Path = 5,
-            Open = 6,
-            Closed = 7,
+            Unvisited = 6,
+            Visited = 7,
             Current = 8
         }
 }

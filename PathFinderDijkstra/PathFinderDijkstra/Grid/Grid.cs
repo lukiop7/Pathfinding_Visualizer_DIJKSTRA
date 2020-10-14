@@ -10,6 +10,7 @@ namespace PathFinderDijkstra.Grid
     {
         private readonly Cell[,] _grid;
 
+
         public Grid(int horizontalCells, int verticalCells)
         {
             _grid = new Cell[horizontalCells, verticalCells];
@@ -21,7 +22,7 @@ namespace PathFinderDijkstra.Grid
                 }
             }
 
-            SetStartAndEnd();
+           // SetStartAndEnd();
         }
 
         public void Randomize()
@@ -56,10 +57,20 @@ namespace PathFinderDijkstra.Grid
             SetStartAndEnd();
         }
 
+        public void ResetGrid()
+        {
+            for (var x = 0; x < _grid.GetLength(0); x++)
+            {
+                for (var y = 0; y < _grid.GetLength(1); y++)
+                {
+                    SetCell(x, y, CellType.Empty);
+                }
+            }
+        }
         public Cell GetCell(int x, int y)
         {
             if (x > _grid.GetLength(0) - 1 || x < 0 || y > _grid.GetLength(1) - 1 || y < 0)
-                return new Cell {x = -1, y = 1, type = CellType.Invalid};
+                return new Cell {coords=new Coords(x,y), type = CellType.Invalid};
 
             return _grid[x, y];
         }
@@ -76,15 +87,21 @@ namespace PathFinderDijkstra.Grid
 
         public void SetCell(int x, int y, CellType type)
         {
-            _grid[x, y] = new Cell
+            if (_grid[x, y] != null)
             {
-                x = x,
-                y = y,
-                type = type,
-                weight = GetCell(x, y)?.weight ?? 0
-            };
+                _grid[x, y].type = type;
+            }
+            else
+            {
+                _grid[x, y] = new Cell
+                {
+                    coords=new Coords(x,y),
+                    type = type,
+                    weight = GetCell(x, y)?.weight ?? 0
+                };
+            }
 
-            SetStartAndEnd();
+            // SetStartAndEnd();
         }
 
 
@@ -101,21 +118,19 @@ namespace PathFinderDijkstra.Grid
 
         public int GetTraversableCells()
         {
-            return GetCountOfType(CellType.Open) + GetCountOfType(CellType.A) + GetCountOfType(CellType.B);
+            return GetCountOfType(CellType.Unvisited) + GetCountOfType(CellType.A) + GetCountOfType(CellType.B);
         }
 
         private void SetStartAndEnd()
         {
             _grid[0, 0] = new Cell
             {
-                x = 0,
-                y = 0,
+                coords = new Coords(0,0),
                 type = CellType.A
             };
             _grid[_grid.GetLength(0) - 1, _grid.GetLength(1) - 1] = new Cell
             {
-                x = _grid.GetLength(0) - 1,
-                y = _grid.GetLength(1) - 1,
+                coords= new Coords(_grid.GetLength(0) - 1, _grid.GetLength(1) - 1),
                 type = CellType.B
             };
         }

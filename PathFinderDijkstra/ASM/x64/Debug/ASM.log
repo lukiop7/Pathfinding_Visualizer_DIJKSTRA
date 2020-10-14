@@ -1,5 +1,2 @@
 ﻿C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\MSBuild\Microsoft\VC\v160\Microsoft.CppBuild.targets(438,5): warning MSB8004: Output Directory does not end with a trailing slash.  This build instance will add the slash as it is required to allow proper evaluation of the Output Directory.
-  Assembling AsmLibrary.asm...
-  LINK : ..\PathFinderDijkstra\x64\Debug\ASM.dll not found or not built by the last incremental link; performing full link
-     Creating library ..\PathFinderDijkstra\x64\Debug\ASM.lib and object ..\PathFinderDijkstra\x64\Debug\ASM.exp
-  ASM.vcxproj -> E:\STUDIA\Sem5\APL_PROJ\PathFinderDijkstra\ASM\..\PathFinderDijkstra\x64\Debug\ASM.dll
+  ASM.vcxproj -> E:\STUDIA\Sem5\APL_PROJ\Projekt\PathFinderDijkstra\ASM\..\PathFinderDijkstra\x64\Debug\ASM.dll

@@ -8,8 +8,7 @@ namespace PathFinderDijkstra.Grid
 {
     public class Cell
     {
-        public int x { get; set; }
-        public int y { get; set; }
+        public Coords coords { get; set; }
         public CellType type { get; set; }
         public int weight { get; set; }
     }

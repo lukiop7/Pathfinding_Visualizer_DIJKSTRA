@@ -15,6 +15,8 @@ namespace PathFinderDijkstra.GridDrawer
     {
         private readonly PictureBox _pb;
         public Grid Grid { get; }
+        public Cell? startCell { get; set; }
+        public Cell? endCell { get; set; }
 
         private const int HorizontalCells = 40;
         private const int VerticalCells = 20;
@@ -28,10 +30,19 @@ namespace PathFinderDijkstra.GridDrawer
             Grid = new Grid(HorizontalCells, VerticalCells);
         }
 
+        public void Reset()
+        {
+            Grid.ResetGrid();
+            Draw();
+        }
+
         public void Draw()
         {
             _cellWidth = _pb.Width / HorizontalCells;
             _cellHeight = _pb.Height / VerticalCells;
+
+            if(_pb.Image!=null)
+                _pb.Image.Dispose();
 
             var image = new Bitmap(_pb.Width, _pb.Height);
 
@@ -60,14 +71,14 @@ namespace PathFinderDijkstra.GridDrawer
                             case CellType.Path:
                                 g.FillRectangle(Brushes.Purple, GetRectangle(x, y));
                                 break;
-                            case CellType.Open:
+                            case CellType.Unvisited:
                                 g.FillRectangle(Brushes.LightSkyBlue, GetRectangle(x, y));
                                 break;
-                            case CellType.Closed:
+                            case CellType.Visited:
                                 g.FillRectangle(Brushes.LightSeaGreen, GetRectangle(x, y));
                                 break;
                             case CellType.Current:
-                                g.FillRectangle(Brushes.Crimson, GetRectangle(x, y));
+                                g.FillRectangle(Brushes.Yellow, GetRectangle(x, y));
                                 break;
                             case CellType.A:
                                 g.DrawString("A", GetFont(), Brushes.Red, GetPoint(x, y));
@@ -84,18 +95,33 @@ namespace PathFinderDijkstra.GridDrawer
                 }
 
                 _pb.Image = image;
+                _pb.Update();
             }
         }
 
-        public void gridClicked(int x, int y)
+        public void gridClicked(int x, int y,CellType clickType)
         {
             int xCell = x / _cellWidth;
             int yCell = y / _cellHeight;
             var cell = Grid.GetCell(xCell, yCell);
-            cell.type = CellType.Solid;
+            cell.type = clickType;
+            if (clickType == CellType.A)
+            {
+                if (startCell != null)
+                {
+                    startCell.type = CellType.Empty;
+                }
+                startCell = cell;
+            }
+            else if (clickType == CellType.B)
+            {
+                if (endCell != null)
+                {
+                    endCell.type = CellType.Empty;
+                }
+                endCell = cell;
+            }
             Draw();
-            
-
         }
         private Rectangle GetRectangle(int x, int y)
         {
