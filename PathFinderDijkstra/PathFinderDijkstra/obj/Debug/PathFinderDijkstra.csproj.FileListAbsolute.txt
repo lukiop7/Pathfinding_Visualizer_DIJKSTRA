@@ -16,3 +16,5 @@ E:\STUDIA\Sem5\APL_PROJ\Projekt\PathFinderDijkstra\PathFinderDijkstra\obj\Debug\
 E:\STUDIA\Sem5\APL_PROJ\Projekt\PathFinderDijkstra\PathFinderDijkstra\obj\Debug\PathFinderDijkstra.csproj.GenerateResource.cache
 E:\STUDIA\Sem5\APL_PROJ\Projekt\PathFinderDijkstra\PathFinderDijkstra\obj\Debug\PathFinderDijkstra.exe
 E:\STUDIA\Sem5\APL_PROJ\Projekt\PathFinderDijkstra\PathFinderDijkstra\obj\Debug\PathFinderDijkstra.pdb
+E:\STUDIA\Sem5\APL_PROJ\Projekt\PathFinderDijkstra\PathFinderDijkstra\x64\Debug\DijkstraNET.pdb
+E:\STUDIA\Sem5\APL_PROJ\Projekt\PathFinderDijkstra\PathFinderDijkstra\obj\Debug\PathFinderDijkstra.csproj.CopyComplete

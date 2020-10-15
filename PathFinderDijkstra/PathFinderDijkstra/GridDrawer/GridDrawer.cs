@@ -101,8 +101,8 @@ namespace PathFinderDijkstra.GridDrawer
 
         public void gridClicked(int x, int y,CellType clickType)
         {
-            int xCell = x / _cellWidth;
-            int yCell = y / _cellHeight;
+            int xCell = x / _cellHeight;
+            int yCell = y / _cellWidth;
             var cell = Grid.GetCell(xCell, yCell);
             cell.type = clickType;
             if (clickType == CellType.A)
@@ -136,6 +136,18 @@ namespace PathFinderDijkstra.GridDrawer
         private Font GetFont()
         {
             return new Font(FontFamily.GenericMonospace, Math.Min(_cellWidth, _cellHeight) / 1.3f, FontStyle.Bold);
+        }
+
+        public Cell GetCell(int index)
+        {
+            int x, y;
+            y = index / 40;
+            x = index % 40;
+            return Grid.GetCell(x, y);
+        }
+        public int GetIndex(Cell cell)
+        {
+            return (cell.coords.y * 40 + cell.coords.x);
         }
     }
 }
