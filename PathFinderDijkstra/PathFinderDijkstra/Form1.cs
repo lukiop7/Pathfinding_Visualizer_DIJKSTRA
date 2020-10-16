@@ -10,6 +10,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using DijkstraNET;
 using PathFinderDijkstra.Algorithm;
 using PathFinderDijkstra.Grid;
 using PathFinderDijkstra.GridDrawer;
@@ -79,6 +80,8 @@ namespace PathFinderDijkstra
 
         private void runAlgoButton_Click(object sender, EventArgs e)
         {
+            if (gridDrawer.startCell.type != CellType.A)
+                gridDrawer.ClearSolution();
             performAlgo();
         }
         private void performAlgo()
@@ -87,8 +90,6 @@ namespace PathFinderDijkstra
             int destination = gridDrawer.GetIndex(gridDrawer.endCell);
             int current = source;
 
-
-            // to bedzie w gui robione, tam ustawie cale tabele i wszystko
             int[] distances = new int[800];
             int[] previous = new int[800];
             bool[] visits = new bool[800];

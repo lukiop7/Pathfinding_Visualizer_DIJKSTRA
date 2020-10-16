@@ -67,6 +67,7 @@ namespace PathFinderDijkstra.Grid
                 }
             }
         }
+    
         public Cell GetCell(int x, int y)
         {
             if (x > _grid.GetLength(0) - 1 || x < 0 || y > _grid.GetLength(1) - 1 || y < 0)

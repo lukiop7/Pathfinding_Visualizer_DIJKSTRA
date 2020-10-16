@@ -149,5 +149,12 @@ namespace PathFinderDijkstra.GridDrawer
         {
             return (cell.coords.y * 40 + cell.coords.x);
         }
+
+        public void ClearSolution()
+        {
+            Grid.ResetGrid();
+            startCell.type = CellType.A;
+            endCell.type = CellType.B;
+        }
     }
 }

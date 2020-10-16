@@ -1,4 +1,9 @@
 ﻿C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\MSBuild\Microsoft\VC\v160\Microsoft.CppBuild.targets(438,5): warning MSB8004: Output Directory does not end with a trailing slash.  This build instance will add the slash as it is required to allow proper evaluation of the Output Directory.
   Assembling AsmLibrary.asm...
-     Creating library ..\PathFinderDijkstra\x64\Debug\ASM.lib and object ..\PathFinderDijkstra\x64\Debug\ASM.exp
-  ASM.vcxproj -> E:\STUDIA\Sem5\APL_PROJ\Projekt\PathFinderDijkstra\ASM\..\PathFinderDijkstra\x64\Debug\ASM.dll
+AsmLibrary.asm(20): error A2070: invalid instruction operands
+AsmLibrary.asm(21): error A2070: invalid instruction operands
+AsmLibrary.asm(37): error A2070: invalid instruction operands
+AsmLibrary.asm(38): error A2070: invalid instruction operands
+AsmLibrary.asm(31): error A2202: illegal use of segment register
+AsmLibrary.asm(32): error A2202: illegal use of segment register
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\MSBuild\Microsoft\VC\v160\BuildCustomizations\masm.targets(70,5): error MSB3721: The command "ml64.exe /c /nologo /Zi /Fo"x64\Debug\AsmLibrary.obj" /W3 /errorReport:prompt  /TaAsmLibrary.asm" exited with code 1.

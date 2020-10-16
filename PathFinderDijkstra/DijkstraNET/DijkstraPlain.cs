@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PathFinderDijkstra.Algorithm
+namespace DijkstraNET
 {
-    public  static class DijkstraPlain
+    public static class DijkstraPlain
     {
         private static int MinimalDistance(int[] distances, bool[] visits)
         {
@@ -28,19 +28,19 @@ namespace PathFinderDijkstra.Algorithm
         public static int[] GetNeighbours(bool[] visits, int current)
         {
             int[] cells = new int[4];
-            if(current % 40 == 0)
-                cells[0] =  -1;
+            if (current % 40 == 0)
+                cells[0] = -1;
             else
-            cells[0] = current - 1;
+                cells[0] = current - 1;
             if (current % 40 == 1)
                 cells[1] = -1;
             else
                 cells[1] = current + 1;
             cells[2] = current + 40;
             cells[3] = current - 40;
-            for(int i = 0; i < 4; i++)
+            for (int i = 0; i < 4; i++)
             {
-                if(cells[i]>=800 || cells[i] < 0 || visits[cells[i]])
+                if (cells[i] >= 800 || cells[i] < 0 || visits[cells[i]])
                 {
                     cells[i] = -1;
                 }
@@ -72,7 +72,7 @@ namespace PathFinderDijkstra.Algorithm
             {
                 visits[current] = true;
                 int[] neighbours = GetNeighbours(visits, current);
-                for(int i = 0; i < 4; i++)
+                for (int i = 0; i < 4; i++)
                 {
                     int index = neighbours[i];
                     if (index != -1)
