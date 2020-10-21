@@ -1,4 +1,5 @@
-﻿using System;
+﻿
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -32,15 +33,21 @@ namespace DijkstraNET
                 cells[0] = -1;
             else
                 cells[0] = current - 1;
-            if (current % 40 == 1)
+            if (current % 40 == 39)
                 cells[1] = -1;
             else
                 cells[1] = current + 1;
-            cells[2] = current + 40;
-            cells[3] = current - 40;
+            if (current + 40 >= 800)
+                cells[2] = -1;
+            else
+                cells[2] = current + 40;
+            if (current - 40 < 0)
+                cells[3] = -1;
+            else
+                cells[3] = current - 40;
             for (int i = 0; i < 4; i++)
             {
-                if (cells[i] >= 800 || cells[i] < 0 || visits[cells[i]])
+                if (cells[i] != -1 && visits[cells[i]])
                 {
                     cells[i] = -1;
                 }
@@ -82,6 +89,33 @@ namespace DijkstraNET
                         {
                             distances[index] = dist;
                             previous[index] = current;
+                        }
+                    }
+                }
+            }
+            return current;
+        }
+
+        public static int fullAlgorithm(int[] distances, bool[] visits, int[] previous, int source, int destination, int current)
+        {
+            while (current != destination)
+            {
+                current = MinimalDistance(distances, visits);
+                if (current != destination)
+                {
+                    visits[current] = true;
+                    int[] neighbours = GetNeighbours(visits, current);
+                    for (int i = 0; i < 4; i++)
+                    {
+                        int index = neighbours[i];
+                        if (index != -1)
+                        {
+                            int dist = distances[current] + 1;
+                            if (dist < distances[index])
+                            {
+                                distances[index] = dist;
+                                previous[index] = current;
+                            }
                         }
                     }
                 }

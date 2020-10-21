@@ -21,17 +21,28 @@ namespace PathFinderDijkstra
     {
         private GridDrawer.GridDrawer gridDrawer;
         private CellType clickType = CellType.Empty;
-        private Dijkstra dijkstra;
 
         public unsafe class NETProxy
         {
-            [DllImport("DijkstraNET.dll")]
-            public static extern string text();
+            [DllImport("Asm.dll")]
+            public static extern int sumArray(int* ptr,int *ptr2, int len);
 
 
-            public string executetext()
+            public int callsumArray(int[] a)
             {
-                return text();
+                int b = 3;
+                int[] arr = new int[3] { 1, 2, 3 };
+                unsafe
+                {
+                    fixed (int* ptr = a)
+                    {
+                        fixed(int* ptr2 = arr){
+                            return sumArray(ptr,ptr2, b);
+                        }
+                      
+                    }
+                }
+
             }
 
         }
@@ -75,7 +86,10 @@ namespace PathFinderDijkstra
 
         private void eraseButton_Click(object sender, EventArgs e)
         {
-            clickType = CellType.Empty;
+            //clickType = CellType.Empty;
+            NETProxy asm = new NETProxy();
+            int[] array = new int[3] { 1, 2, 3 };
+                    eraseButton.Text = asm.callsumArray(array).ToString();
         }
 
         private void runAlgoButton_Click(object sender, EventArgs e)
@@ -119,20 +133,20 @@ namespace PathFinderDijkstra
                 }
             }
             Cell previousCell = gridDrawer.startCell;
-            current = DijkstraPlain.Run(distances, visits, previous, source, destination, current);
-            while (current != destination)
-            {
-                var cell =gridDrawer.GetCell(current);
-                if (cell != gridDrawer.endCell)
-                {
-                    previousCell.type = CellType.Visited;
-                    cell.type = CellType.Current;
-                    current = DijkstraPlain.Run(distances, visits, previous, source, destination, current);
-                    previousCell = cell;
-                }
-                gridDrawer.Draw();
-            }
-            while (current != source)
+            current = DijkstraPlain.fullAlgorithm(distances, visits, previous, source, destination, current);
+            //while (current != destination)
+            //{
+            //    var cell =gridDrawer.GetCell(current);
+            //    if (cell != gridDrawer.endCell)
+            //    {
+            //        previousCell.type = CellType.Visited;
+            //        cell.type = CellType.Current;
+            //        current = DijkstraPlain.Run(distances, visits, previous, source, destination, current);
+            //        previousCell = cell;
+            //    }
+            //    gridDrawer.Draw();
+            //}
+            while (current != -1)
             {
                 var cell = gridDrawer.GetCell(current);
                 cell.type = CellType.Path;
