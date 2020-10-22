@@ -1,18 +1,35 @@
 .data
+len DD 0
+dest DD 0 
+source DD 0
+distances DD 0
+visited DD 0
+previous DD 0
 .code
 
 sumArray proc
+	mov [distances], ecx
+	mov [visited], edx
+	mov rax, r8 
+	mov [previous], eax
+	mov rax, r9 
+	mov [source], eax
+	mov rax, 0
+    mov eax, DWORD PTR[rsp + 40]
+	mov [dest], eax
+	mov eax, DWORD PTR[rsp + 48]
+	mov [len], eax
 	mov eax, 0
 repeat_count:
-	dec r8d
-	cmp r8d, -1
+	dec [len]
+	cmp [len], -1
 	je return_result
-	add [rcx], r8d
-	mov r11d, [rcx]
+	mov r11d, [r8]
 	add eax, r11d
-	mov r11d, [rdx]
-	add rcx, 4
-	add rdx, 4
+	mov r11d, [previous]
+	add eax, [r11d]
+	add r8, 4
+	add [previous], 4
 	jmp repeat_count
 return_result:
 	ret

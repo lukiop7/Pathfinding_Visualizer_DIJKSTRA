@@ -25,19 +25,21 @@ namespace PathFinderDijkstra
         public unsafe class NETProxy
         {
             [DllImport("Asm.dll")]
-            public static extern int sumArray(int* ptr,int *ptr2, int len);
+            public static extern int sumArray(int* distances, bool* visits, int* previous, int source, int destination, int len);
 
 
-            public int callsumArray(int[] a)
+            public int callsumArray(int[] distances, bool[] visits, int[] previous, int source, int destination, int len)
             {
-                int b = 3;
-                int[] arr = new int[3] { 1, 2, 3 };
                 unsafe
                 {
-                    fixed (int* ptr = a)
+                    fixed (int* dist = distances)
                     {
-                        fixed(int* ptr2 = arr){
-                            return sumArray(ptr,ptr2, b);
+                        fixed(bool* visited = visits)
+                        {
+                            fixed(int* prev = previous)
+                            {
+                                return sumArray(dist, visited, prev,source,destination,len);
+                            }
                         }
                       
                     }
@@ -88,8 +90,13 @@ namespace PathFinderDijkstra
         {
             //clickType = CellType.Empty;
             NETProxy asm = new NETProxy();
-            int[] array = new int[3] { 1, 2, 3 };
-                    eraseButton.Text = asm.callsumArray(array).ToString();
+            int[] distances = new int[3] { 1, 2, 3 };
+            int[] previous = new int[3] { 1, 2, 3 };
+            bool[] visited = new bool[3] {true, true, false};
+            int source = 4;
+            int destination = 9;
+            int len = 3;
+            eraseButton.Text = asm.callsumArray(distances, visited, previous, source, destination, len).ToString();
         }
 
         private void runAlgoButton_Click(object sender, EventArgs e)
