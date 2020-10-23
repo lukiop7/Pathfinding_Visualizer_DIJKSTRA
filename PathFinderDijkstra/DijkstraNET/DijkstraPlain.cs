@@ -16,10 +16,13 @@ namespace DijkstraNET
 
             for (int v = 0; v < 800; ++v)
             {
-                if (visits[v] == false && distances[v] <= min)
+                if (visits[v] == false )
                 {
-                    min = distances[v];
-                    minIndex = v;
+                    if(distances[v] <= min)
+                    {
+                        min = distances[v];
+                        minIndex = v;
+                    }
                 }
             }
 
@@ -47,8 +50,9 @@ namespace DijkstraNET
                 cells[3] = current - 40;
             for (int i = 0; i < 4; i++)
             {
-                if (cells[i] != -1 && visits[cells[i]])
+                if (cells[i] != -1)
                 {
+                   if( visits[cells[i]])
                     cells[i] = -1;
                 }
             }

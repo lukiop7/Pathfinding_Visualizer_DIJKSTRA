@@ -25,20 +25,20 @@ namespace PathFinderDijkstra
         public unsafe class NETProxy
         {
             [DllImport("Asm.dll")]
-            public static extern int sumArray(int* distances, bool* visits, int* previous, int source, int destination, int len);
+            public static extern void dijkstraAsm(int* distances, int* visits, int* previous, int source, int destination, int len);
 
 
-            public int callsumArray(int[] distances, bool[] visits, int[] previous, int source, int destination, int len)
+            public void callsumArray(int[] distances, int[] visits, int[] previous, int source, int destination, int len)
             {
                 unsafe
                 {
                     fixed (int* dist = distances)
                     {
-                        fixed(bool* visited = visits)
+                        fixed(int* visited = visits)
                         {
                             fixed(int* prev = previous)
                             {
-                                return sumArray(dist, visited, prev,source,destination,len);
+                               dijkstraAsm(dist, visited, prev,source,destination,len);
                             }
                         }
                       
@@ -90,13 +90,46 @@ namespace PathFinderDijkstra
         {
             //clickType = CellType.Empty;
             NETProxy asm = new NETProxy();
-            int[] distances = new int[3] { 1, 2, 3 };
-            int[] previous = new int[3] { 1, 2, 3 };
-            bool[] visited = new bool[3] {true, true, false};
-            int source = 4;
-            int destination = 9;
-            int len = 3;
-            eraseButton.Text = asm.callsumArray(distances, visited, previous, source, destination, len).ToString();
+            int len = 800;
+            int source = gridDrawer.GetIndex(gridDrawer.startCell);
+            int destination = gridDrawer.GetIndex(gridDrawer.endCell);
+            int current = source;
+
+            int[] distances = new int[800];
+            int[] previous = new int[800];
+            int[] visited = new int[800];
+            bool[] visits = new bool[800];
+            for (int i = 0; i < distances.Length; i++)
+            {
+                distances[i] = int.MaxValue;
+                previous[i] = -1;
+                visited[i] = 0;
+            }
+            distances[source] = 0;
+            visited[source] = 1;
+            int[] neighbours = DijkstraPlain.GetNeighbours(visits, current);
+            for (int i = 0; i < 4; i++)
+            {
+                int index = neighbours[i];
+                if (index != -1)
+                {
+                    int dist = distances[current] + 1;
+                    if (dist < distances[index])
+                    {
+                        distances[index] = dist;
+                        previous[index] = current;
+                    }
+                }
+            }
+           asm.callsumArray(distances, visited, previous, source, destination, len);
+            current = destination;
+            while (current != -1)
+            {
+                var cell = gridDrawer.GetCell(current);
+                cell.type = CellType.Path;
+                current = previous[current];
+                gridDrawer.Draw();
+            }
         }
 
         private void runAlgoButton_Click(object sender, EventArgs e)
@@ -125,6 +158,7 @@ namespace PathFinderDijkstra
                 previous[i] = -1;
             }
             distances[source] = 0;
+            visits[source] = true;
             int[] neighbours = DijkstraPlain.GetNeighbours(visits, current);
             for (int i = 0; i < 4; i++)
             {
