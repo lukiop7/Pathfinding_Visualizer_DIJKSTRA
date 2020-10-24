@@ -103,7 +103,10 @@ namespace PathFinderDijkstra
             {
                 distances[i] = int.MaxValue;
                 previous[i] = -1;
-                visited[i] = 0;
+                if (gridDrawer.GetCell(i).type == CellType.Solid)
+                    visited[i] = 1;
+                else
+                    visited[i] = 0;
             }
             distances[source] = 0;
             visited[source] = 1;

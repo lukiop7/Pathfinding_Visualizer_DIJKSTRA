@@ -79,33 +79,6 @@ finish:
 	ret
 dijkstraAsm endp
 
-minimal_distance:
-	mov r12d, [len]
-	mov r11d, [distances]
-	mov r14d, [int_max]
-	mov [min_value], r14d
-	mov [min_index], -1
-	mov r12d, -1
-minimal_loop:
-	inc r12d
-	cmp r12d, [len]
-	je return_minimum
-	mov r13d, visited
-	cmp DWORD PTR[r13d + r12d*4], 0
-	JNE minimal_loop_2
-	mov r14d, [min_value] 
-	cmp [r11d], r14d
-	JAE minimal_loop_2
-change_minimum:
-	mov r14d, [r11d]
-	mov [min_value], r14d
-	mov [min_index], r12d
-minimal_loop_2:
-	add r11d, 4
-	jmp minimal_loop
-return_minimum:
-	mov eax, [min_index]
-	ret
 
 get_neighbours:
 	mov r12d, [current] ; current do r12d
@@ -118,6 +91,7 @@ get_neighbours:
 	JE first
 	cmp r12d, 39
 	JE second 
+	mov r12d, [current] ; current do r12d
 	add r12d, 1
 	mov [neighbours], r12d ; nie dziala musisz to przemyslec bardzo dobrze
 	add r14d, 4
@@ -210,6 +184,35 @@ fourth_visited:
 	jmp ret_neighbours
 ret_neighbours:		
 	ret
+
+minimal_distance:
+	mov r12d, [len]
+	mov r11d, [distances]
+	mov r14d, [int_max]
+	mov [min_value], r14d
+	mov [min_index], -1
+	mov r12d, -1
+minimal_loop:
+	inc r12d
+	cmp r12d, [len]
+	je return_minimum
+	mov r13d, visited
+	cmp DWORD PTR[r13d + r12d*4], 0
+	JNE minimal_loop_2
+	mov r14d, [min_value] 
+	cmp [r11d], r14d
+	JAE minimal_loop_2
+change_minimum:
+	mov r14d, [r11d]
+	mov [min_value], r14d
+	mov [min_index], r12d
+minimal_loop_2:
+	add r11d, 4
+	jmp minimal_loop
+return_minimum:
+	mov eax, [min_index]
+	ret
+
 
 
 
