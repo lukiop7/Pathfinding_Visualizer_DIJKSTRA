@@ -11,7 +11,6 @@ E:\STUDIA\Sem5\APL_PROJ\Projekt\PathFinderDijkstra\PathFinderDijkstra\x64\Debug\
 E:\STUDIA\Sem5\APL_PROJ\Projekt\PathFinderDijkstra\PathFinderDijkstra\x64\Debug\PathFinderDijkstra.exe
 E:\STUDIA\Sem5\APL_PROJ\Projekt\PathFinderDijkstra\PathFinderDijkstra\x64\Debug\PathFinderDijkstra.pdb
 E:\STUDIA\Sem5\APL_PROJ\Projekt\PathFinderDijkstra\PathFinderDijkstra\obj\Debug\PathFinderDijkstra.csprojAssemblyReference.cache
-E:\STUDIA\Sem5\APL_PROJ\Projekt\PathFinderDijkstra\PathFinderDijkstra\obj\Debug\PathFinderDijkstra.Form1.resources
 E:\STUDIA\Sem5\APL_PROJ\Projekt\PathFinderDijkstra\PathFinderDijkstra\obj\Debug\PathFinderDijkstra.Properties.Resources.resources
 E:\STUDIA\Sem5\APL_PROJ\Projekt\PathFinderDijkstra\PathFinderDijkstra\obj\Debug\PathFinderDijkstra.csproj.GenerateResource.cache
 E:\STUDIA\Sem5\APL_PROJ\Projekt\PathFinderDijkstra\PathFinderDijkstra\obj\Debug\PathFinderDijkstra.exe
@@ -94,3 +93,4 @@ E:\STUDIA\Sem5\APL_PROJ\Projekt\PathFinderDijkstra\PathFinderDijkstra\x64\Debug\
 E:\STUDIA\Sem5\APL_PROJ\Projekt\PathFinderDijkstra\PathFinderDijkstra\x64\Debug\zh-Hant\Microsoft.CodeAnalysis.CSharp.resources.dll
 E:\STUDIA\Sem5\APL_PROJ\Projekt\PathFinderDijkstra\PathFinderDijkstra\x64\Debug\DijkstraNET.pdb
 E:\STUDIA\Sem5\APL_PROJ\Projekt\PathFinderDijkstra\PathFinderDijkstra\x64\Debug\DijkstraNET.dll.config
+E:\STUDIA\Sem5\APL_PROJ\Projekt\PathFinderDijkstra\PathFinderDijkstra\obj\Debug\PathFinderDijkstra.GUI.resources

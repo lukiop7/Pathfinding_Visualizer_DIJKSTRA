@@ -14,7 +14,7 @@ neighbours_check DD 1, -1, 40, -40
 neighbours_valid DD 4294967295,4294967295,4294967295,4294967295
 .code
 
-dijkstraAsm proc
+dijkstraASM proc
 
 initialize:
 	push rsi
@@ -77,7 +77,7 @@ skip:
 finish: 
 	pop rsi
 	ret
-dijkstraAsm endp
+dijkstraASM endp
 
 
 get_neighbours:
