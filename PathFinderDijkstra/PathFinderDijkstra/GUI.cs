@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Linq;
@@ -21,6 +22,7 @@ namespace PathFinderDijkstra
         private GridDrawer.GridDrawer gridDrawer;
         private CellType clickType = CellType.Empty;
         private bool isDrawing;
+        private Stopwatch timer;
 
         public unsafe class NETProxy
         {
@@ -32,16 +34,9 @@ namespace PathFinderDijkstra
             {
                 unsafe
                 {
-                    fixed (int* dist = distances)
+                    fixed (int* prev = previous, visited = visits, dist = distances)
                     {
-                        fixed(int* visited = visits)
-                        {
-                            fixed(int* prev = previous)
-                            {
-                                dijkstraASM(dist, visited, prev,source,destination,len);
-                            }
-                        }
-                      
+                        dijkstraASM(dist, visited, prev, source, destination, len);
                     }
                 }
 
@@ -53,6 +48,7 @@ namespace PathFinderDijkstra
             InitializeComponent();
             InitializeGrid();
             languageComboBox.DataSource = Enum.GetValues(typeof(dllEnum));
+            timer = new Stopwatch();
         }
 
         private void InitializeGrid()
@@ -68,7 +64,7 @@ namespace PathFinderDijkstra
 
         private void mainGrid_MouseClick(object sender, MouseEventArgs e)
         {
-            gridDrawer.gridClicked(e.X,e.Y,clickType);
+            gridDrawer.gridClicked(e.X, e.Y, clickType);
         }
 
         private void startButton_Click(object sender, EventArgs e)
@@ -97,41 +93,42 @@ namespace PathFinderDijkstra
             int[] distances = new int[800];
             int[] previous = new int[800];
             int[] visited = new int[800];
-            bool[] visits = new bool[800];
             for (int i = 0; i < distances.Length; i++)
             {
-                distances[i] = int.MaxValue; // TUTAJ ZROBIC SSE 
-                previous[i] = -1;
+                // distances[i] = int.MaxValue;
                 if (gridDrawer.GetCell(i).type == CellType.Solid)
                     visited[i] = 1;
                 else
                     visited[i] = 0;
+                // previous[i] = -1;
             }
-            distances[source] = 0;
-            visited[source] = 1;
-            int[] neighbours = DijkstraPlain.GetNeighbours(visits, current);
-            for (int i = 0; i < 4; i++)
-            {
-                int index = neighbours[i];
-                if (index != -1)
-                {
-                    int dist = distances[current] + 1;
-                    if (dist < distances[index])
-                    {
-                        distances[index] = dist;
-                        previous[index] = current;
-                    }
-                }
-            }
+
+            timer.Reset();
+            timer.Start();
             asm.callsumArray(distances, visited, previous, source, destination, len);
+            timer.Stop();
+
+            asmTimeLabel.Text = timer.ElapsedTicks.ToString();
             current = destination;
-            while (current != -1)
+
+            var cell = gridDrawer.GetCell(current);
+            cell.type = CellType.Visited;
+            current = previous[current];
+            gridDrawer.Draw();
+
+            while (current != source)
             {
-                var cell = gridDrawer.GetCell(current);
+                cell = gridDrawer.GetCell(current);
                 cell.type = CellType.Path;
                 current = previous[current];
+
                 gridDrawer.Draw();
             }
+
+            cell = gridDrawer.GetCell(current);
+            cell.type = CellType.Visited;
+            gridDrawer.Draw();
+
         }
         private void eraseButton_Click(object sender, EventArgs e)
         {
@@ -156,6 +153,8 @@ namespace PathFinderDijkstra
             int[] distances = new int[800];
             int[] previous = new int[800];
             bool[] visits = new bool[800];
+            timer.Reset();
+            timer.Start();
             for (int i = 0; i < distances.Length; i++)
             {
                 distances[i] = int.MaxValue;
@@ -183,7 +182,10 @@ namespace PathFinderDijkstra
                 }
             }
             Cell previousCell = gridDrawer.startCell;
+
             current = DijkstraPlain.fullAlgorithm(distances, visits, previous, source, destination, current);
+            timer.Stop();
+            netTimeLabel.Text = timer.ElapsedTicks.ToString();
             //while (current != destination)
             //{
             //    var cell =gridDrawer.GetCell(current);
@@ -225,5 +227,6 @@ namespace PathFinderDijkstra
         {
             isDrawing = false;
         }
+
     }
 }

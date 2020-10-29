@@ -58,24 +58,6 @@ namespace DijkstraNET
             }
             return cells;
         }
-
-        public static void First(int source)
-        {
-            // to bedzie w gui robione, tam ustawie cale tabele i wszystko
-            int[] distances = new int[800];
-            int[] previous = new int[800];
-            bool[] visits = new bool[800];
-            for (int i = 0; i < distances.Length; i++)
-            {
-                distances[i] = int.MaxValue;
-                // jesli bedzie sciana to od razu zaznaczac jako visited zeby nie bylo problemu
-                visits[i] = false;
-                previous[i] = -1;
-            }
-            distances[source] = 0;
-
-        }
-
         public static int Run(int[] distances, bool[] visits, int[] previous, int source, int destination, int current)
         {
             current = MinimalDistance(distances, visits);

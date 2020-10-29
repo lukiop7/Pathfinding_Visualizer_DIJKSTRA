@@ -106,8 +106,9 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <ModuleDefinitionFile>AsmLibrary.def</ModuleDefinitionFile>
-      <NoEntryPoint>false</NoEntryPoint>
-      <EntryPointSymbol>main</EntryPointSymbol>
+      <NoEntryPoint>true</NoEntryPoint>
+      <EntryPointSymbol>
+      </EntryPointSymbol>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">

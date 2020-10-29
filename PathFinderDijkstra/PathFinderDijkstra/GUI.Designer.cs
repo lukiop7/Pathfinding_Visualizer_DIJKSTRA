@@ -36,6 +36,10 @@
             this.eraseButton = new System.Windows.Forms.Button();
             this.runAlgoButton = new System.Windows.Forms.Button();
             this.languageComboBox = new System.Windows.Forms.ComboBox();
+            this.asmLabel = new System.Windows.Forms.Label();
+            this.netLabel = new System.Windows.Forms.Label();
+            this.asmTimeLabel = new System.Windows.Forms.Label();
+            this.netTimeLabel = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.mainGrid)).BeginInit();
             this.SuspendLayout();
             // 
@@ -119,11 +123,51 @@
             this.languageComboBox.Size = new System.Drawing.Size(99, 21);
             this.languageComboBox.TabIndex = 4;
             // 
+            // asmLabel
+            // 
+            this.asmLabel.AutoSize = true;
+            this.asmLabel.Location = new System.Drawing.Point(255, 420);
+            this.asmLabel.Name = "asmLabel";
+            this.asmLabel.Size = new System.Drawing.Size(55, 13);
+            this.asmLabel.TabIndex = 5;
+            this.asmLabel.Text = "Asm time: ";
+            // 
+            // netLabel
+            // 
+            this.netLabel.AutoSize = true;
+            this.netLabel.Location = new System.Drawing.Point(250, 440);
+            this.netLabel.Name = "netLabel";
+            this.netLabel.Size = new System.Drawing.Size(60, 13);
+            this.netLabel.TabIndex = 6;
+            this.netLabel.Text = ".NET time: ";
+            // 
+            // asmTimeLabel
+            // 
+            this.asmTimeLabel.AutoSize = true;
+            this.asmTimeLabel.Location = new System.Drawing.Point(316, 420);
+            this.asmTimeLabel.Name = "asmTimeLabel";
+            this.asmTimeLabel.Size = new System.Drawing.Size(13, 13);
+            this.asmTimeLabel.TabIndex = 5;
+            this.asmTimeLabel.Text = "0";
+            // 
+            // netTimeLabel
+            // 
+            this.netTimeLabel.AutoSize = true;
+            this.netTimeLabel.Location = new System.Drawing.Point(316, 440);
+            this.netTimeLabel.Name = "netTimeLabel";
+            this.netTimeLabel.Size = new System.Drawing.Size(13, 13);
+            this.netTimeLabel.TabIndex = 6;
+            this.netTimeLabel.Text = "0";
+            // 
             // GUI
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(804, 500);
+            this.Controls.Add(this.netTimeLabel);
+            this.Controls.Add(this.netLabel);
+            this.Controls.Add(this.asmTimeLabel);
+            this.Controls.Add(this.asmLabel);
             this.Controls.Add(this.languageComboBox);
             this.Controls.Add(this.runAlgoButton);
             this.Controls.Add(this.eraseButton);
@@ -136,6 +180,7 @@
             this.Text = "Dijkstra Pathfinder";
             ((System.ComponentModel.ISupportInitialize)(this.mainGrid)).EndInit();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -149,6 +194,10 @@
         private System.Windows.Forms.Button eraseButton;
         private System.Windows.Forms.Button runAlgoButton;
         private System.Windows.Forms.ComboBox languageComboBox;
+        private System.Windows.Forms.Label asmLabel;
+        private System.Windows.Forms.Label netLabel;
+        private System.Windows.Forms.Label asmTimeLabel;
+        private System.Windows.Forms.Label netTimeLabel;
     }
 }
 
