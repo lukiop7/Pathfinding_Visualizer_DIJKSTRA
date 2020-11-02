@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             this.mainGrid = new System.Windows.Forms.PictureBox();
-            this.button1 = new System.Windows.Forms.Button();
+            this.clearButton = new System.Windows.Forms.Button();
             this.startButton = new System.Windows.Forms.Button();
             this.endButton = new System.Windows.Forms.Button();
             this.wallButton = new System.Windows.Forms.Button();
@@ -52,15 +52,15 @@
             this.mainGrid.TabStop = false;
             this.mainGrid.MouseClick += new System.Windows.Forms.MouseEventHandler(this.mainGrid_MouseClick);
             // 
-            // button1
+            // clearButton
             // 
-            this.button1.Location = new System.Drawing.Point(498, 413);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(97, 40);
-            this.button1.TabIndex = 1;
-            this.button1.Text = "Clear";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
+            this.clearButton.Location = new System.Drawing.Point(498, 413);
+            this.clearButton.Name = "clearButton";
+            this.clearButton.Size = new System.Drawing.Size(97, 40);
+            this.clearButton.TabIndex = 1;
+            this.clearButton.Text = "Clear";
+            this.clearButton.UseVisualStyleBackColor = true;
+            this.clearButton.Click += new System.EventHandler(this.clearButton_Click);
             // 
             // startButton
             // 
@@ -174,7 +174,7 @@
             this.Controls.Add(this.wallButton);
             this.Controls.Add(this.endButton);
             this.Controls.Add(this.startButton);
-            this.Controls.Add(this.button1);
+            this.Controls.Add(this.clearButton);
             this.Controls.Add(this.mainGrid);
             this.Name = "GUI";
             this.Text = "Dijkstra Pathfinder";
@@ -187,7 +187,7 @@
         #endregion
 
         private System.Windows.Forms.PictureBox mainGrid;
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button clearButton;
         private System.Windows.Forms.Button startButton;
         private System.Windows.Forms.Button endButton;
         private System.Windows.Forms.Button wallButton;

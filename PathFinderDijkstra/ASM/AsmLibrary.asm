@@ -1,248 +1,230 @@
 
-get_neighbours macro reg
-	mov r12d, [current] ; current do r12d
-	mov r14d, 0
-	mov ecx, 40
-	CDQ
-	IDIV ecx
+get_neighbours macro reg ; gets neighbours of the current element 
+	mov r12d, [current] ; move index of the current element to the r12d register
+	mov ecx, 40 ; move value 40 (boundary value of the row) to the ecx register, it is a preparation for calculating current%40 
+	CDQ ; convert double to quad
+	IDIV ecx ; divide eax by edx, modulo is performed here
 
-	mov r12d, edx
-	cmp r12d, 0
-	JE first
+	mov r12d, edx ; move edx (result of the modulo operation) to the r12d register
+	cmp r12d, 0 ; check if the result is equal to zero - it means current cell is on the left bound
+	JE first ; jump to the section calculating indexes of the neighbours when current%40=0
 
-	cmp r12d, 39
-	JE second 
+	cmp r12d, 39 ; check if the result is equal to 39 - it means current cell is on the right bound
+	JE second ; jump to the section calculating indexes of the neighbours when current%40=39
 
-	mov r12d, [current] ; current do r12d
-	add r12d, 1
-	mov [neighbours], r12d ; 
-	add r14d, 4
-	sub r12d, 2
-	mov [neighbours +4], r12d
-	add r14d, 4
-	jmp part_2
-first:
-    mov r12d, [int_max]
-	mov [neighbours ], r12d
-	add r14d, 4
-	mov r12d, [current] ; current do r12d
-	add r12d,1
-	mov r13d, [visited]
-	mov [neighbours + 4], r12d
-	add r14d, 4
-	jmp part_2
+	; if current % 40 is not equal to 0 or 39 it means that the current cell is not on the left or right bound so we don't have to worry about picking the invalid neighbour (e.g. -1)
+	mov r12d, [current] ; move current to r12d register
+	add r12d, 1 ; add one to the current index - right side neighbour
+	mov [neighbours], r12d ; put the neighbour into the array
+	sub r12d, 2  ; subtract one from the current index - left side neighbour
+	mov [neighbours +4], r12d ; put the neighbour into the array
+	jmp part_2 ; jump to the section calculating the upper and bottom  neighbours
 
-second:
-    mov r12d, [int_max]
-	mov [neighbours], r12d
-	add r14d, 4
-	mov r12d, [current] ; current do r12d
-	sub r12d,1
-	mov r13d, [visited]
-	mov [neighbours + 4], r12d
-	add r14d, 4
-	jmp part_2
+first: ; if current cell is on the right bound 
+    mov r12d, [int_max] ; move max value to the r12d register - it will mark it as invalid neighbour
+	mov [neighbours ], r12d ; put the neighbour into the array
+	mov r12d, [current] ; move current to r12d register
+	add r12d,1  ; add one to the current index - right side neighbour
+	mov [neighbours + 4], r12d ; put the neighbour into the array
+	jmp part_2 ; jump to the section calculating the upper and bottom  neighbours
 
-part_2:
-		mov r12d, [current] ; current do r12d
-		add r12, 40 
-		cmp r12, 800
-		JAE third
+second:  ; if current cell is on the left bound 
+    mov r12d, [int_max] ; move max value to the r12d register - it will mark it as invalid neighbour
+	mov [neighbours], r12d ; put the neighbour into the array
+	mov r12d, [current]   ; move current to r12d register
+	sub r12d,1 ; subtract one from the current index - left side neighbour
+	mov [neighbours + 4], r12d  ; put the neighbour into the array
+	jmp part_2  ; jump to the section calculating the upper and bottom  neighbours
 
-		mov r12d, [current] ; current do r12d
-		sub r12, 40 
-		cmp r12, 800
-		JAE fourth
+part_2: ; this section is responsible for getting upper and bottom  neighbour
+		mov r12d, [current] ; move current to r12d register
+		add r12, 40 ; add 40 to the current index - bottom neighbour
+		cmp r12, 800 ; check if the neigbhour is in the range of the array
+		JAE third ; if not go to te appropriate section
 
-		mov [neighbours + 8], r12d
-		add r14d, 4
-		add r12, 80 
-		mov [neighbours + 12], r12d
-		add r14d, 4
-		jmp ret_neighbours
-third:
-    mov r12d, [int_max]
-	mov [neighbours + 8], r12d
-	add r14d, 4
-	mov r12d, [current] ; current do r12d
-	sub r12d,40
-	mov r13d, [visited]
+		mov r12d, [current] ; move current to r12d register
+		sub r12, 40 ; subtract 40 from the current index - upper neighbour
+		cmp r12, 800 ; check if the neigbhour is in the range of the array
+		JAE fourth ; if not go to te appropriate section
 
-	mov [neighbours + 12], r12d
-	add r14d, 4
-	jmp ret_neighbours
+		mov [neighbours + 8], r12d ; put the upper neighbour into the array
+		add r12, 80  ; add 40 to the current index - bottom neighbour
+		mov [neighbours + 12], r12d ; put the bottom neighbour into the array
+		jmp ret_neighbours ; return neighbours
 
-fourth:
-    mov r12d, [int_max]
-	mov [neighbours + 8], r12d
-	add r14d, 4
-	mov r12d, [current] ; current do r12d
-	add r12,40
-	mov r13d, [visited]
-	mov [neighbours + 12], r12d
-	add r14d, 4
-	jmp ret_neighbours
+third: ; if current cell is on the bottom bound 
+    mov r12d, [int_max] ; move max value to the r12d register - it will mark it as invalid neighbour
+	mov [neighbours + 8], r12d ; put the neighbour into the array
+	mov r12d, [current] ; move current to r12d register
+	sub r12d,40 ; subtract 40 from the current index - upper neighbour
+	mov [neighbours + 12], r12d ; put the neighbour into the array
+	jmp ret_neighbours ; return neighbours
+
+fourth: ; if current cell is on the upper bound 
+    mov r12d, [int_max] ; move max value to the r12d register - it will mark it as invalid neighbour
+	mov [neighbours + 8], r12d ; put the neighbour into the array
+	mov r12d, [current] ; move current to r12d register
+	add r12,40 ; add 40 to the current index - bottom neighbour
+	mov [neighbours + 12], r12d ; put the neighbour into the array
+	jmp ret_neighbours ; return neighbours
 
 ret_neighbours:		
 	endm
 
-minimal_distance macro reg
-	mov r12d, [len]
-	mov r11d, [distances]
-	mov r14d, [int_max]
-	mov [min_value], r14d
-	mov [min_index], -1
-	mov r12d, -1
+minimal_distance macro reg ; finds the element with the smallest distance value
+	mov r11d, [distances] ; move the pointer to the array with distances to r11d register
+	mov r14d, [int_max] ; move the default max value to r14d register
+	mov [min_value], r14d ; set the current min value to the max value
+	mov [min_index], -1 ; set the current index of the cell with min value to -1
+	mov r12d, -1  ; set the counter to -1 
 
-minimal_loop:
-	inc r12d
-	cmp r12d, [len]
-	je return_minimum
+minimal_loop: ; loop through the all elements of the array 
+	inc r12d ; increment the counter 
+	cmp r12d, [len] ; check if all elements of the array were checked 
+	je return_minimum ; if yes return the index of the min element
 
-	mov r13d, visited
-	cmp DWORD PTR[r13d + r12d*4], 0
-	JNE minimal_loop_2
+	mov r13d, visited ; move the pointer to the array with visited elements to r13d array 
+	cmp DWORD PTR[r13d + r12d*4], 0 ; check if current element was visited 
+	JNE minimal_loop_2 ; if yes skip this element
 
-	mov r14d, [min_value] 
-	cmp [r11d], r14d
-	JAE minimal_loop_2
+	mov r14d, [min_value]  ; move the current min value to r14d register
+	cmp [r11d], r14d ; check if the distance of the current element is smaller than the current minimum
+	JAE minimal_loop_2 ; if no skip 
 
-change_minimum:
-	mov r14d, [r11d]
-	mov [min_value], r14d
-	mov [min_index], r12d
+change_minimum: ; if the current element distance value is smaller - change the current minimum
+	mov r14d, [r11d] ; move the current min value to the r14d register
+	mov [min_value], r14d ; update the current min value
+	mov [min_index], r12d ; update the current index of the element with min value
 
-minimal_loop_2:
-	add r11d, 4
-	jmp minimal_loop
+minimal_loop_2: ; proceed to the next element 
+	add r11d, 4 ; move the pointer to the next element in the array 
+	jmp minimal_loop ; jump to the loop - check nex element
 
-return_minimum:
-	mov eax, [min_index]
+return_minimum: ; minimum was found 
+	mov eax, [min_index] ; store the index of the element with the smallest value in the eax register 
 	endm
 
 .data
-len DD 0
-dest DD 0 
-source DD 0
-distances DD 0
-visited DD 0
-previous DD 0
-int_max DD 268435455
-min_value DD 4294967295
-min_index DD -1
-current DD 0
-neighbours DD 1, 1, 1, 1
+len DD 0 ; holds the length of the array
+dest DD 0 ; index of the destination cell 
+source DD 0 ; index of the source cell
+distances DD 0 ; holds array of distances 
+visited DD 0 ; holds array of boolean values
+previous DD 0 ; holds array of indexes to previous cells
+int_max DD 268435455 ; max value 
+min_value DD 4294967295 ; holds current min value - used in finding the minimum of the array
+min_index DD -1 ; holds index of the current min value
+current DD 0 ; index of the current cell 
+neighbours DD 1, 1, 1, 1 ; helper array used in get_neighbours macro, holds indexes of the neighbours of the current cell
 .code
 
-initialize_arrays:
-		mov ecx, 25	; 
-	do_loop:
-		movups [r11d    ], xmm0
-		movups [r11d+16 ], xmm0
-		movups [r11d+32 ], xmm0
-		movups [r11d+48 ], xmm0
-		movups [r11d+64 ], xmm0
-		movups [r11d+80 ], xmm0
-		movups [r11d+96 ], xmm0
-		movups [r11d+112], xmm0
+initialize_arrays: ; fills arrays with default values, uses SIMD instructions
+		mov ecx, 25	; loop has to run exactly 25 times - counter
+	do_loop: ; loads default values to the array
+		movups [r11d    ], xmm0 ; moves default values stored in xmm0 register to 4 elements from the array
+		movups [r11d+16 ], xmm0 ; moves default values stored in xmm0 register to 4 elements from the array
+		movups [r11d+32 ], xmm0 ; moves default values stored in xmm0 register to 4 elements from the array
+		movups [r11d+48 ], xmm0 ; moves default values stored in xmm0 register to 4 elements from the array
+		movups [r11d+64 ], xmm0 ; moves default values stored in xmm0 register to 4 elements from the array
+		movups [r11d+80 ], xmm0 ; moves default values stored in xmm0 register to 4 elements from the array
+		movups [r11d+96 ], xmm0 ; moves default values stored in xmm0 register to 4 elements from the array
+		movups [r11d+112], xmm0 ; moves default values stored in xmm0 register to 4 elements from the array
 
-		add r11d, 128	; 
-		loop do_loop	; 
-		ret
+		add r11d, 128	;  move the pointer 32 elements 
+		loop do_loop	; loop as long as ecx is not equal to 0
+		ret ; return
 
-dijkstraASM proc
+dijkstraASM proc ; main procedure of the algorithm
 
-initialize:
-	push rsi
+initialize: ; initialize the variables and arrays
 
-	;save the parameters
-	mov [distances], ecx
-	mov [visited], edx
-	mov rax, r8 
-	mov [previous], eax
-	mov rax, r9 
-	mov [source], eax
-	mov rax, 0
-    mov eax, DWORD PTR[rsp + 48]
-	mov [dest], eax
-	mov eax, DWORD PTR[rsp + 56]
-	mov [len], eax
-	mov eax, 0
+	push rsi ; push the register source index value onto the stack
 
-	;initialize the arrays 
-	mov r11d, [distances]
-	movups xmm0, [int_max]
-	shufps  xmm0, xmm0, 0 
-	call initialize_arrays
-	mov r11d, [previous]
-	movups xmm0, [min_index]
-	shufps  xmm0, xmm0, 0 
-	call initialize_arrays
-	mov r11d, [distances]
 
-	; set the source distance to 0 
-	mov DWORD PTR[r11d+r9d*4], 0
+	mov [distances], ecx ; store the pointer to the array with distances (first parameter) in the variable
+	mov [visited], edx ; store the pointer to the visited cells array (second parameter) in the variable
+	mov rax, r8  ; move the pointer to the previous cells array to the rax register (third parameter)
+	mov [previous], eax ; store the previous elements array in the variable
+	mov rax, r9  ; move the index of the source cell to the rax register (fourth parameter)
+	mov [source], eax ; store the source cell index in the variable
+    mov eax, DWORD PTR[rsp + 48] ; take the index of the destination cell from the stack (fifth parameter)
+	mov [dest], eax ; store the index of the destination cell in the variable
+	mov eax, DWORD PTR[rsp + 56] ; take the length of the array from the stack (sixth parameter)
+	mov [len], eax ; store the length in the variable
 
-main_loop:
-	;find the current min
-	minimal_distance
-	mov [current], eax
+	; initialize the arrays 
 
-	; if the current element is our destination - finish
-	cmp eax, [dest]
-	JE finish
+	mov r11d, [distances] ; copy the pointer to the array of distances to the r11d register
+	movups xmm0, [int_max] ; move the default max value to the xmm0 register
+	shufps  xmm0, xmm0, 0 ; fill the xmm0 register with the default value (clone already loaded element 3 times)
+	call initialize_arrays ; call the initize_arrays in order to fill the distances array with default (max) value
+	mov r11d, [previous] ; copy the pointer to the array of previous elements to the r11d register 
+	movups xmm0, [min_index] ; move the default -1 index value to the xmm0 register
+	shufps  xmm0, xmm0, 0 ; fill the xmm0 register with the default value (clone already loaded element 3 times)
+	call initialize_arrays ; call the initize_arrays in order to fill the previous elements array with default (-1) value
 
-	;mark current node as visited
-	mov r13d, visited
-	mov DWORD PTR[r13d + eax*4], 1
+	mov r11d, [distances] ; move the pointer to the distances array to r11d register
 
-	;get its neighbours
-	get_neighbours
+	mov DWORD PTR[r11d+r9d*4], 0 ; set the distance of the source cell to zero
 
-	mov r12d, -1
+main_loop: ; main loop of the algorithm
+	minimal_distance ; find the unvisited element with the minimum distance value and store its index in eax
+	mov [current], eax ; store the index of the returned current cell to the variable
 
-	; put the neighbours on the stack
-	movups xmm0, [neighbours]
 
-check_loop: 
-	inc r12d
-	cmp r12d, 4
-	je main_loop
+	cmp eax, [dest] ; if the current element is our destination - finish
+	JE finish ; jump to the finish 
 
-	pextrd r14d, xmm0, 0
-	psrldq xmm0, 4
 
-	cmp r14d, 800
-	jae skip
+	mov r13d, visited 	; move the pointer to the visited array to r13d register
+	mov DWORD PTR[r13d + eax*4], 1 ; mark current node as visited
 
-	mov r13d, visited
-	cmp DWORD PTR DWORD PTR[r13d + r14d*4], 1
-	je skip
+	get_neighbours ; find and validiate the neighbours of the current cell
 
-	mov r13d, distances
-	mov r11d, [current]
+	mov r12d, -1 ; prepare the counter in r12d register
 
-	;distance to check = distances[current] + 1;
-	mov eax,  DWORD PTR[r13d + r11d*4]
-	add eax, 1
+	movups xmm0, [neighbours] ; store the neighbours in the xmm0 register
 
-	;current distance to r11d
-	mov r11d, DWORD PTR[r13d + r14d*4]
+check_loop: ; check if the distance from the current element to its neighbours is smaller than their current distances, if yes - update the distance and set current cell as previous
 
-	;compare if the new distance is smaller
-	cmp eax, r11d
-	jae skip
+	inc r12d ; increment the counter 
+	cmp r12d, 4 ; check if all neighbours were check
+	je main_loop ; if yes come back to the main loop and find new current cell
 
-	;if yes change the distance and previous node
-	mov DWORD PTR[r13d + r14d*4], eax ;distance
-	mov r13d, [current]
-	mov r11d, previous
-	mov DWORD PTR[r11d + r14d*4], r13d		; previous
+	pextrd r14d, xmm0, 0 ; extract the first element from the xmm0 register to r14d register
+	psrldq xmm0, 4 ; shift xmm0 right by 4 bytes - second element becomes first 
+
+	cmp r14d, 800 ; check if the index of the neighbour is valid - if yes it means that neighbour exist and can be checked
+	jae skip ; if not skip this one
+
+	mov r13d, visited ; move the pointer to the visited array to r13d register
+	cmp DWORD PTR DWORD PTR[r13d + r14d*4], 1 ; check if the current neighbour was visited
+	je skip ; if yes skip this one 
+
+	mov r13d, distances ; move the pointer to the array of distances to r13d register
+	mov r11d, [current] ; move the index of the current cell to r11d register
+
+	mov eax,  DWORD PTR[r13d + r11d*4] ; store the distance to the current cell in the eax
+	add eax, 1 ; distance to check = distances[current] + 1;
+
+
+	mov r11d, DWORD PTR[r13d + r14d*4] 	; move the distance to the current neighbour to the r11d register 
+
+	cmp eax, r11d	; compare if the from the current cell to the neighbour is smaller than neighbour's current distance
+	jae skip ; if not skip 
+
+	;if yes change the distance and previous element
+
+	mov DWORD PTR[r13d + r14d*4], eax ; update the distance to the neigbhour - distance from current cell is smaller 
+	mov r13d, [current] ; move the index of the current element to r13d register
+	mov r11d, previous ; move the pointer to the array with previous cells to the r11d register 
+	mov DWORD PTR[r11d + r14d*4], r13d		; set the current cell as the previous cell on the path to the neighbour
 skip: 
-	jmp check_loop
-finish: 
-			pop rsi
-	ret
+	jmp check_loop ; proceed to the next neighbour
+
+finish:  ; if the algorithm is finished
+			pop rsi ; restore the value of the rsi register
+	ret ; return from the procedure
 
 dijkstraASM endp
 

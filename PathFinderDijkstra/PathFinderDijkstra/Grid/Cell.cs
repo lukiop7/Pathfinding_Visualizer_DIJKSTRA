@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace PathFinderDijkstra.Grid
 {
+    [Serializable]
     public class Cell
     {
         public Coords coords { get; set; }

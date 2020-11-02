@@ -256,6 +256,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="dllEnum.cs" />
+    <Compile Include="Grid\Extensions.cs" />
     <Compile Include="GUI.cs">
       <SubType>Form</SubType>
     </Compile>

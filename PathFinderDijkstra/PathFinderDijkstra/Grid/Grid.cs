@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace PathFinderDijkstra.Grid
 {
+    [Serializable]
     public class Grid
     {
         private readonly Cell[,] _grid;
@@ -134,6 +135,11 @@ namespace PathFinderDijkstra.Grid
                 coords= new Coords(_grid.GetLength(0) - 1, _grid.GetLength(1) - 1),
                 type = CellType.B
             };
+        }
+
+        public Grid Clone()
+        {
+           return (Grid)this.MemberwiseClone();
         }
     }
 }

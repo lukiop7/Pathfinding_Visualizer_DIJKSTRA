@@ -21,8 +21,9 @@ namespace PathFinderDijkstra
     {
         private GridDrawer.GridDrawer gridDrawer;
         private CellType clickType = CellType.Empty;
-        private bool isDrawing;
         private Stopwatch timer;
+        private PathFinderDijkstra.Grid.Grid inputGrid;
+        private bool solved = false;
 
         public unsafe class NETProxy
         {
@@ -30,7 +31,7 @@ namespace PathFinderDijkstra
             public static extern void dijkstraASM(int* distances, int* visits, int* previous, int source, int destination, int len);
 
 
-            public void callsumArray(int[] distances, int[] visits, int[] previous, int source, int destination, int len)
+            public void calldijkstraASM(int[] distances, int[] visits, int[] previous, int source, int destination, int len)
             {
                 unsafe
                 {
@@ -57,29 +58,74 @@ namespace PathFinderDijkstra
             gridDrawer.Draw();
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void clearButton_Click(object sender, EventArgs e)
         {
             gridDrawer.Reset();
+            inputGrid = null;
         }
 
         private void mainGrid_MouseClick(object sender, MouseEventArgs e)
         {
+            if (solved)
+            {
+                SetInputGrid();
+            }
             gridDrawer.gridClicked(e.X, e.Y, clickType);
         }
 
         private void startButton_Click(object sender, EventArgs e)
         {
+            SetInputGrid();
+
             clickType = CellType.A;
+            inputGrid = null;
         }
+
 
         private void endButton_Click(object sender, EventArgs e)
         {
+            SetInputGrid();
             clickType = CellType.B;
+            inputGrid = null;
         }
 
         private void wallButton_Click(object sender, EventArgs e)
         {
+            SetInputGrid();
             clickType = CellType.Solid;
+            inputGrid = null;
+        }
+
+        private void eraseButton_Click(object sender, EventArgs e)
+        {
+            SetInputGrid();
+            clickType = CellType.Empty;
+            inputGrid = null;
+        }
+
+        private void runAlgoButton_Click(object sender, EventArgs e)
+        {
+            if (gridDrawer.startCell == null || gridDrawer.endCell == null)
+            {
+                MessageBox.Show("Set start and end before running the algorithm!", "Warning no start and end");
+                return;
+            }
+            else
+            {
+                if (inputGrid != null)
+                {
+                    gridDrawer.Grid = inputGrid.DeepClone();
+                    gridDrawer.Draw();
+                }
+                else
+                {
+                    inputGrid = gridDrawer.Grid.DeepClone();
+                }
+                if ((dllEnum)languageComboBox.SelectedItem == dllEnum.dotNET)
+                    dotNETRun();
+                else
+                    asmRun();
+            }
         }
 
         private void asmRun()
@@ -95,55 +141,24 @@ namespace PathFinderDijkstra
             int[] visited = new int[800];
             for (int i = 0; i < distances.Length; i++)
             {
-                // distances[i] = int.MaxValue;
                 if (gridDrawer.GetCell(i).type == CellType.Solid)
                     visited[i] = 1;
                 else
                     visited[i] = 0;
-                // previous[i] = -1;
             }
 
             timer.Reset();
             timer.Start();
-            asm.callsumArray(distances, visited, previous, source, destination, len);
+            asm.calldijkstraASM(distances, visited, previous, source, destination, len);
             timer.Stop();
 
             asmTimeLabel.Text = timer.ElapsedTicks.ToString();
             current = destination;
-
-            var cell = gridDrawer.GetCell(current);
-            cell.type = CellType.Visited;
-            current = previous[current];
-            gridDrawer.Draw();
-
-            while (current != source)
-            {
-                cell = gridDrawer.GetCell(current);
-                cell.type = CellType.Path;
-                current = previous[current];
-
-                gridDrawer.Draw();
-            }
-
-            cell = gridDrawer.GetCell(current);
-            cell.type = CellType.Visited;
-            gridDrawer.Draw();
+            draw_solution(previous, current, source);
 
         }
-        private void eraseButton_Click(object sender, EventArgs e)
-        {
-            clickType = CellType.Empty;
-        }
 
-        private void runAlgoButton_Click(object sender, EventArgs e)
-        {
-            //if (gridDrawer.startCell.type != CellType.A)
-            //    gridDrawer.ClearSolution();
-            if ((dllEnum)languageComboBox.SelectedItem == dllEnum.dotNET)
-                dotNETRun();
-            else
-                asmRun();
-        }
+
         private void dotNETRun()
         {
             int source = gridDrawer.GetIndex(gridDrawer.startCell);
@@ -158,12 +173,12 @@ namespace PathFinderDijkstra
             for (int i = 0; i < distances.Length; i++)
             {
                 distances[i] = int.MaxValue;
-                // jesli bedzie sciana to od razu zaznaczac jako visited zeby nie bylo problemu
+                previous[i] = -1;
+                // if current cell is a wall => mark is as visited
                 if (gridDrawer.GetCell(i).type == CellType.Solid)
                     visits[i] = true;
                 else
                     visits[i] = false;
-                previous[i] = -1;
             }
             distances[source] = 0;
             visits[source] = true;
@@ -198,35 +213,49 @@ namespace PathFinderDijkstra
             //    }
             //    gridDrawer.Draw();
             //}
-            while (current != -1)
+            draw_solution(previous, current, source);
+        }
+
+        private void draw_solution(int[] previous, int current, int source)
+        {
+            var cell = gridDrawer.GetCell(current);
+            cell.type = CellType.Visited;
+            current = previous[current];
+            gridDrawer.Draw();
+
+            while (current != source)
             {
-                var cell = gridDrawer.GetCell(current);
+                cell = gridDrawer.GetCell(current);
                 cell.type = CellType.Path;
                 current = previous[current];
+
+                gridDrawer.Draw();
+            }
+
+            cell = gridDrawer.GetCell(current);
+            cell.type = CellType.Visited;
+            gridDrawer.Draw();
+
+            solved = true;
+        }
+
+
+        private void SetInputGrid()
+        {
+            if (inputGrid != null)
+            {
+                gridDrawer.Grid = inputGrid.DeepClone();
+                if (gridDrawer.startCell != null)
+                {
+                    gridDrawer.startCell = gridDrawer.Grid.GetCell(gridDrawer.startCell.coords.x, gridDrawer.startCell.coords.y);
+                }
+                if (gridDrawer.endCell != null)
+                {
+                    gridDrawer.endCell = gridDrawer.Grid.GetCell(gridDrawer.endCell.coords.x, gridDrawer.endCell.coords.y);
+                }
+                solved = false;
                 gridDrawer.Draw();
             }
         }
-
-        private void mainGrid_MouseDown(object sender, MouseEventArgs e)
-        {
-            isDrawing = true;
-            drawOnGrid(e);
-        }
-        private void drawOnGrid(MouseEventArgs e)
-        {
-            Task.Run(() =>
-            {
-                while (isDrawing)
-                    gridDrawer.gridClicked(e.X, e.Y, clickType);
-            }
-                );
-
-        }
-
-        private void mainGrid_MouseUp(object sender, MouseEventArgs e)
-        {
-            isDrawing = false;
-        }
-
     }
 }

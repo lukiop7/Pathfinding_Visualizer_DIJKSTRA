@@ -14,7 +14,7 @@ namespace PathFinderDijkstra.GridDrawer
     public class GridDrawer
     {
         private readonly PictureBox _pb;
-        public Grid Grid { get; }
+        public Grid Grid { get; set; }
         public Cell? startCell { get; set; }
         public Cell? endCell { get; set; }
 
@@ -33,6 +33,8 @@ namespace PathFinderDijkstra.GridDrawer
         public void Reset()
         {
             Grid.ResetGrid();
+            startCell = null;
+            endCell = null;
             Draw();
         }
 
@@ -101,15 +103,19 @@ namespace PathFinderDijkstra.GridDrawer
 
         public void gridClicked(int x, int y,CellType clickType)
         {
-            int xCell = x / _cellHeight;
-            int yCell = y / _cellWidth;
+            int xCell = x / _cellWidth;
+            int yCell = y / _cellHeight;
             var cell = Grid.GetCell(xCell, yCell);
             cell.type = clickType;
             if (clickType == CellType.A)
             {
                 if (startCell != null)
                 {
-                    startCell.type = CellType.Empty;
+                    if (cell != startCell)
+                    {
+                        startCell.type = CellType.Empty;
+                        startCell = null;
+                    }
                 }
                 startCell = cell;
             }
@@ -117,7 +123,11 @@ namespace PathFinderDijkstra.GridDrawer
             {
                 if (endCell != null)
                 {
-                    endCell.type = CellType.Empty;
+                    if (cell != endCell)
+                    {
+                        endCell.type = CellType.Empty;
+                        endCell = null;
+                    }
                 }
                 endCell = cell;
             }
