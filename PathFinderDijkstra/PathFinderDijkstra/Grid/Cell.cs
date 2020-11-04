@@ -14,6 +14,9 @@ using System.Threading.Tasks;
 
 namespace PathFinderDijkstra.Grid
 {
+    /// <summary>
+    /// Cell.
+    /// </summary>
     [Serializable]
     public class Cell
     {

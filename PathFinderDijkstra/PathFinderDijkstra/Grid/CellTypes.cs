@@ -14,6 +14,9 @@ using System.Threading.Tasks;
 
 namespace PathFinderDijkstra.Grid
 {
+    /// <summary>
+    /// Types of cells
+    /// </summary>
     public enum CellType
         {
             Invalid = -1,

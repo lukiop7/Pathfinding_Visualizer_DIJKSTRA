@@ -228,7 +228,6 @@ main_loop: ; main loop of the algorithm
 
 	mov r12d, -1 ; prepare the counter in r12d register
 
-	;movups xmm0, [neighbours] ; store the neighbours in the xmm0 register
 
 check_loop: ; check if the distance from the current element to its neighbours is smaller than their current distances, if yes - update the distance and set current cell as previous
 

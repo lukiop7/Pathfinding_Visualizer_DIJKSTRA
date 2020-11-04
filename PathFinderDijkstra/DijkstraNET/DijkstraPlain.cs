@@ -6,12 +6,6 @@
 // Winter Semester, 2020/2021
 // Lukasz Kwiecien Informatics
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 namespace DijkstraNET
 {
     public static class DijkstraPlain
@@ -91,21 +85,6 @@ namespace DijkstraNET
         public static int fullAlgorithm(int[] distances, bool[] visits, int[] previous, int source, int destination, int current)
         {
             distances[source] = 0;
-            visits[source] = true;
-            int[] neighbours_first = DijkstraPlain.GetNeighbours(visits, current);
-            for (int i = 0; i < 4; i++)
-            {
-                int index = neighbours_first[i];
-                if (index != -1)
-                {
-                    int dist = distances[current] + 1;
-                    if (dist < distances[index])
-                    {
-                        distances[index] = dist;
-                        previous[index] = current;
-                    }
-                }
-            }
 
             while (current != destination)
             {

@@ -7,32 +7,38 @@
 // Lukasz Kwiecien Informatics
 
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Diagnostics;
-using System.Drawing;
-using System.Drawing.Drawing2D;
 using System.IO;
-using System.Linq;
 using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using DijkstraNET;
 using Newtonsoft.Json;
 using PathFinderDijkstra.Grid;
-using PathFinderDijkstra.GridDrawer;
+
 
 namespace PathFinderDijkstra
 {
     public partial class GUI : Form
     {
+        /// <summary>
+        /// Draws on the grid.
+        /// </summary>
         private GridDrawer.GridDrawer gridDrawer;
+        /// <summary>
+        /// Used for drawing on the grid.
+        /// </summary>
         private CellType clickType = CellType.Empty;
+        /// <summary>
+        /// Measures the execution time.
+        /// </summary>
         private Stopwatch timer;
+        /// <summary>
+        /// Allows to clear the solution.
+        /// </summary>
         private PathFinderDijkstra.Grid.Grid inputGrid;
+        /// <summary>
+        /// Is solved?
+        /// </summary>
         private bool solved = false;
 
         /// <summary>

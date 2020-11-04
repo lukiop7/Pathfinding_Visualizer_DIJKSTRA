@@ -7,13 +7,12 @@
 // Lukasz Kwiecien Informatics
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PathFinderDijkstra.Grid
 {
+    /// <summary>
+    /// Grid clas..
+    /// </summary>
     [Serializable]
     public class Grid
     {

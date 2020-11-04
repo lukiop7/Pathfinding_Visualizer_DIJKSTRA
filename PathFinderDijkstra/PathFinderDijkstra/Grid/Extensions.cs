@@ -16,6 +16,9 @@ using System.Threading.Tasks;
 
 namespace PathFinderDijkstra.Grid
 {
+	/// <summary>
+	/// Responsible for making deep copy of the object.
+	/// </summary>
 	public static class Extensions
 	{
 		public static T DeepClone<T>(this T obj)

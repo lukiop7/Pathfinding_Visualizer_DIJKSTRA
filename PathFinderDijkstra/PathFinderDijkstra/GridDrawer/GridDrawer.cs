@@ -6,13 +6,6 @@
 // Winter Semester, 2020/2021
 // Lukasz Kwiecien Informatics
 
-
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 namespace PathFinderDijkstra.GridDrawer
 {
     using System;
@@ -20,6 +13,9 @@ namespace PathFinderDijkstra.GridDrawer
     using System.Windows.Forms;
     using Grid;
 
+    /// <summary>
+    /// Class responsible for drawing on the grid.
+    /// </summary>
     public class GridDrawer
     {
         private readonly PictureBox _pb;

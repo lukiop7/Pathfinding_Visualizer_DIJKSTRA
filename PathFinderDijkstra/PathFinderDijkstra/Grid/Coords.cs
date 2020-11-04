@@ -14,6 +14,9 @@ using System.Threading.Tasks;
 
 namespace PathFinderDijkstra.Grid
 {
+    /// <summary>
+    /// Coordinates.
+    /// </summary>
     [Serializable]
     public class Coords
     {
