@@ -1,4 +1,12 @@
-﻿using System;
+﻿// Finding the shortest path using Dijkstra algorithm
+
+// Algorithm finds the shortest path in a maze
+
+// 3.11.2020
+// Winter Semester, 2020/2021
+// Lukasz Kwiecien Informatics
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,13 +17,11 @@ namespace PathFinderDijkstra.Grid
     public enum CellType
         {
             Invalid = -1,
-            Empty = 0,
-            Solid = 1,
+        Solid = 0,
+        Empty = 1,
             A = 3,
             B = 4,
             Path = 5,
-            Unvisited = 6,
-            Visited = 7,
-            Current = 8
+            Visited = 6
         }
 }

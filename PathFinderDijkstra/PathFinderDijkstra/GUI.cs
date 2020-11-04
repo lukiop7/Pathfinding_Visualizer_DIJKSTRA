@@ -1,10 +1,19 @@
-﻿using System;
+﻿// Finding the shortest path using Dijkstra algorithm
+
+// Algorithm finds the shortest path in a maze
+
+// 3.11.2020
+// Winter Semester, 2020/2021
+// Lukasz Kwiecien Informatics
+
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Drawing2D;
+using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -12,6 +21,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using DijkstraNET;
+using Newtonsoft.Json;
 using PathFinderDijkstra.Grid;
 using PathFinderDijkstra.GridDrawer;
 
@@ -78,7 +88,6 @@ namespace PathFinderDijkstra
             SetInputGrid();
 
             clickType = CellType.A;
-            inputGrid = null;
         }
 
 
@@ -86,21 +95,18 @@ namespace PathFinderDijkstra
         {
             SetInputGrid();
             clickType = CellType.B;
-            inputGrid = null;
         }
 
         private void wallButton_Click(object sender, EventArgs e)
         {
             SetInputGrid();
             clickType = CellType.Solid;
-            inputGrid = null;
         }
 
         private void eraseButton_Click(object sender, EventArgs e)
         {
             SetInputGrid();
             clickType = CellType.Empty;
-            inputGrid = null;
         }
 
         private void runAlgoButton_Click(object sender, EventArgs e)
@@ -139,6 +145,7 @@ namespace PathFinderDijkstra
             int[] distances = new int[800];
             int[] previous = new int[800];
             int[] visited = new int[800];
+
             for (int i = 0; i < distances.Length; i++)
             {
                 if (gridDrawer.GetCell(i).type == CellType.Solid)
@@ -149,6 +156,7 @@ namespace PathFinderDijkstra
 
             timer.Reset();
             timer.Start();
+
             asm.calldijkstraASM(distances, visited, previous, source, destination, len);
             timer.Stop();
 
@@ -254,6 +262,104 @@ namespace PathFinderDijkstra
                     gridDrawer.endCell = gridDrawer.Grid.GetCell(gridDrawer.endCell.coords.x, gridDrawer.endCell.coords.y);
                 }
                 solved = false;
+                inputGrid = null;
+                gridDrawer.Draw();
+            }
+        }
+
+        private void loadDataBtn_Click(object sender, EventArgs e)
+        {
+            clearButton_Click(null,null);
+            using (OpenFileDialog openFileDialog = new OpenFileDialog())
+            {
+                openFileDialog.Filter = "Text Files (*.txt)|*.txt|All files (*.*)|*.*";
+                openFileDialog.FilterIndex = 2;
+                openFileDialog.RestoreDirectory = true;
+
+                if (openFileDialog.ShowDialog() == DialogResult.OK)
+                {
+                   string  filePath = openFileDialog.FileName;
+
+                    var fileStream = openFileDialog.OpenFile();
+
+                    using (StreamReader reader = new StreamReader(fileStream))
+                    {
+                        string fileContent = reader.ReadToEnd();
+
+                        int[,] values = JsonConvert.DeserializeObject<int[,]>(fileContent);
+
+                        var rows = values.GetLength(0);
+                        var cols = values.GetLength(1);
+
+                        if(rows>20 || cols >40)
+                            {
+                                MessageBox.Show("Maze in the file is bigger than 40x20", "Warning wrong input file");
+                                return;
+                            }
+                        for (var y = 0; y < cols; y++)
+                        {
+                            for (var x = 0; x < rows; x++)
+                            {
+                                gridDrawer.Grid.SetCell(y, x, (CellType)values[x, y]);
+                                if (values[x, y] == 3)
+                                    gridDrawer.startCell = gridDrawer.Grid.GetCell(y, x);
+                                else if (values[x, y] == 4)
+                                    gridDrawer.endCell = gridDrawer.Grid.GetCell(y, x);
+                            }
+                        }
+                        gridDrawer.Draw();
+                        inputGrid = null;
+                    }
+                }
+            }
+        }
+
+        private void saveDataBtn_Click(object sender, EventArgs e)
+        {
+
+            Cell[,] grid = gridDrawer.Grid._grid;
+
+            var width = grid.GetLength(0);
+            var height = grid.GetLength(1);
+
+            int[,] exportArray = new int[height, width];
+
+            for (var y = 0; y < height; y++)
+            {
+
+                for (var x = 0; x < width; x++)
+                {
+                    exportArray[y, x] = (int)grid[x, y].type;
+
+                }
+            }
+
+            string json = JsonConvert.SerializeObject(exportArray, Formatting.Indented);
+
+            Console.WriteLine($"JSON: \n");
+            Console.WriteLine($"{json}");
+
+
+            SaveFileDialog save = new SaveFileDialog();
+            save.FileName = "Maze.txt";
+            save.Filter = "Text File | *.txt";
+
+            if (save.ShowDialog() == DialogResult.OK)
+            {
+                StreamWriter writer = new StreamWriter(save.OpenFile());
+
+                writer.WriteLine(json);
+                writer.Dispose();
+                writer.Close();
+
+            }
+        }
+
+        private void clearSolutionButton_Click(object sender, EventArgs e)
+        {
+            if (inputGrid != null)
+            {
+                gridDrawer.Grid = inputGrid.DeepClone();
                 gridDrawer.Draw();
             }
         }

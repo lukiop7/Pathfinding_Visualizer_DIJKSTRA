@@ -1,4 +1,13 @@
-﻿using System;
+﻿// Finding the shortest path using Dijkstra algorithm
+
+// Algorithm finds the shortest path in a maze
+
+// 3.11.2020
+// Winter Semester, 2020/2021
+// Lukasz Kwiecien Informatics
+
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -18,8 +27,8 @@ namespace PathFinderDijkstra.GridDrawer
         public Cell? startCell { get; set; }
         public Cell? endCell { get; set; }
 
-        private const int HorizontalCells = 40;
-        private const int VerticalCells = 20;
+        public int HorizontalCells = 40;
+        public int VerticalCells = 20;
 
         private int _cellWidth;
         private int _cellHeight;
@@ -61,11 +70,6 @@ namespace PathFinderDijkstra.GridDrawer
                         switch (cell.type)
                         {
                             case CellType.Empty:
-                                switch (cell.weight)
-                                {
-                                    case 2: g.FillRectangle(Brushes.LightGray, GetRectangle(x, y)); break;
-                                    case 3: g.FillRectangle(Brushes.Silver, GetRectangle(x, y)); break;
-                                }
                                 break;
                             case CellType.Solid:
                                 g.FillRectangle(Brushes.Black, GetRectangle(x, y));
@@ -73,14 +77,8 @@ namespace PathFinderDijkstra.GridDrawer
                             case CellType.Path:
                                 g.FillRectangle(Brushes.Purple, GetRectangle(x, y));
                                 break;
-                            case CellType.Unvisited:
-                                g.FillRectangle(Brushes.LightSkyBlue, GetRectangle(x, y));
-                                break;
                             case CellType.Visited:
                                 g.FillRectangle(Brushes.LightSeaGreen, GetRectangle(x, y));
-                                break;
-                            case CellType.Current:
-                                g.FillRectangle(Brushes.Yellow, GetRectangle(x, y));
                                 break;
                             case CellType.A:
                                 g.DrawString("A", GetFont(), Brushes.Red, GetPoint(x, y));

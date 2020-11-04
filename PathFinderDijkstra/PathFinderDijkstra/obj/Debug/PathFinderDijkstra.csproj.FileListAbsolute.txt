@@ -95,3 +95,5 @@ E:\STUDIA\Sem5\APL_PROJ\Projekt\PathFinderDijkstra\PathFinderDijkstra\x64\Debug\
 E:\STUDIA\Sem5\APL_PROJ\Projekt\PathFinderDijkstra\PathFinderDijkstra\x64\Debug\DijkstraNET.dll.config
 E:\STUDIA\Sem5\APL_PROJ\Projekt\PathFinderDijkstra\PathFinderDijkstra\obj\Debug\PathFinderDijkstra.GUI.resources
 E:\STUDIA\Sem5\APL_PROJ\Projekt\PathFinderDijkstra\PathFinderDijkstra\obj\Debug\PathFinderDijkstra.csproj.CoreCompileInputs.cache
+E:\STUDIA\Sem5\APL_PROJ\Projekt\PathFinderDijkstra\PathFinderDijkstra\x64\Debug\Newtonsoft.Json.dll
+E:\STUDIA\Sem5\APL_PROJ\Projekt\PathFinderDijkstra\PathFinderDijkstra\x64\Debug\Newtonsoft.Json.xml

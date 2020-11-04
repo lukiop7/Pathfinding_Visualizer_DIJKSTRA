@@ -1,5 +1,20 @@
+; Finding the shortest path using Dijkstra algorithm
 
-get_neighbours macro reg ; gets neighbours of the current element 
+; Algorithm finds the shortest path in a maze
+
+;3.11.2020
+; Winter Semester, 2020/2021
+; Lukasz Kwiecien Informatics
+
+; gets neighbours of the current element 
+
+; modified registers: 
+; xmm0 - contains indexes of the neigbours when the macro is finished
+; r12d - is used to calculate the index of the neighbour
+get_neighbours macro reg
+
+	pxor xmm0, xmm0 ; reset the xmm0 register
+
 	mov r12d, [current] ; move index of the current element to the r12d register
 	mov ecx, 40 ; move value 40 (boundary value of the row) to the ecx register, it is a preparation for calculating current%40 
 	CDQ ; convert double to quad
@@ -15,25 +30,25 @@ get_neighbours macro reg ; gets neighbours of the current element
 	; if current % 40 is not equal to 0 or 39 it means that the current cell is not on the left or right bound so we don't have to worry about picking the invalid neighbour (e.g. -1)
 	mov r12d, [current] ; move current to r12d register
 	add r12d, 1 ; add one to the current index - right side neighbour
-	mov [neighbours], r12d ; put the neighbour into the array
+	pinsrd xmm0, r12d, 0 ; insert the first neighbour into the xmm0 register
 	sub r12d, 2  ; subtract one from the current index - left side neighbour
-	mov [neighbours +4], r12d ; put the neighbour into the array
+	pinsrd xmm0, r12d, 1 ; insert the second neighbour into the xmm0 register
 	jmp part_2 ; jump to the section calculating the upper and bottom  neighbours
 
 first: ; if current cell is on the right bound 
     mov r12d, [int_max] ; move max value to the r12d register - it will mark it as invalid neighbour
-	mov [neighbours ], r12d ; put the neighbour into the array
+	pinsrd xmm0, r12d, 0; insert the first neighbour into the xmm0 register
 	mov r12d, [current] ; move current to r12d register
 	add r12d,1  ; add one to the current index - right side neighbour
-	mov [neighbours + 4], r12d ; put the neighbour into the array
+	pinsrd xmm0, r12d, 1 ; insert the second neighbour into the xmm0 register
 	jmp part_2 ; jump to the section calculating the upper and bottom  neighbours
 
 second:  ; if current cell is on the left bound 
     mov r12d, [int_max] ; move max value to the r12d register - it will mark it as invalid neighbour
-	mov [neighbours], r12d ; put the neighbour into the array
+	pinsrd xmm0, r12d, 0 ; insert the first neighbour into the xmm0 register
 	mov r12d, [current]   ; move current to r12d register
 	sub r12d,1 ; subtract one from the current index - left side neighbour
-	mov [neighbours + 4], r12d  ; put the neighbour into the array
+	pinsrd xmm0, r12d, 1 ; insert the second neighbour into the xmm0 register
 	jmp part_2  ; jump to the section calculating the upper and bottom  neighbours
 
 part_2: ; this section is responsible for getting upper and bottom  neighbour
@@ -47,31 +62,39 @@ part_2: ; this section is responsible for getting upper and bottom  neighbour
 		cmp r12, 800 ; check if the neigbhour is in the range of the array
 		JAE fourth ; if not go to te appropriate section
 
-		mov [neighbours + 8], r12d ; put the upper neighbour into the array
+		pinsrd xmm0, r12d, 2 ; insert the third neighbour into the xmm0 register
 		add r12, 80  ; add 40 to the current index - bottom neighbour
-		mov [neighbours + 12], r12d ; put the bottom neighbour into the array
+		pinsrd xmm0, r12d, 3 ; insert the fourth neighbour into the xmm0 register
 		jmp ret_neighbours ; return neighbours
 
 third: ; if current cell is on the bottom bound 
     mov r12d, [int_max] ; move max value to the r12d register - it will mark it as invalid neighbour
-	mov [neighbours + 8], r12d ; put the neighbour into the array
+	pinsrd xmm0, r12d, 2 ; insert the third neighbour into the xmm0 register
 	mov r12d, [current] ; move current to r12d register
 	sub r12d,40 ; subtract 40 from the current index - upper neighbour
-	mov [neighbours + 12], r12d ; put the neighbour into the array
+	pinsrd xmm0, r12d, 3 ; insert the fourth neighbour into the xmm0 register
 	jmp ret_neighbours ; return neighbours
 
 fourth: ; if current cell is on the upper bound 
     mov r12d, [int_max] ; move max value to the r12d register - it will mark it as invalid neighbour
-	mov [neighbours + 8], r12d ; put the neighbour into the array
+	pinsrd xmm0, r12d, 2 ; insert the third neighbour into the xmm0 register
 	mov r12d, [current] ; move current to r12d register
 	add r12,40 ; add 40 to the current index - bottom neighbour
-	mov [neighbours + 12], r12d ; put the neighbour into the array
+	pinsrd xmm0, r12d, 3 ; insert the fourth neighbour into the xmm0 register
 	jmp ret_neighbours ; return neighbours
 
 ret_neighbours:		
 	endm
 
-minimal_distance macro reg ; finds the element with the smallest distance value
+; finds the element with the smallest distance value
+
+; modified registers: 
+; eax - contains index of element with the smallest distance when the macro is finished
+; r11d - stores pointer to the array with distances
+; r12d - counter
+; r14d - current min value
+; r13d - stores pointer to the visited array
+minimal_distance macro reg 
 	mov r11d, [distances] ; move the pointer to the array with distances to r11d register
 	mov r14d, [int_max] ; move the default max value to r14d register
 	mov [min_value], r14d ; set the current min value to the max value
@@ -115,10 +138,18 @@ int_max DD 268435455 ; max value
 min_value DD 4294967295 ; holds current min value - used in finding the minimum of the array
 min_index DD -1 ; holds index of the current min value
 current DD 0 ; index of the current cell 
-neighbours DD 1, 1, 1, 1 ; helper array used in get_neighbours macro, holds indexes of the neighbours of the current cell
 .code
 
-initialize_arrays: ; fills arrays with default values, uses SIMD instructions
+; fills arrays with default values, uses SIMD instructions
+
+; input:
+; r11d - pointer to the array that will be filled with default values
+; xmm0 - default values 
+
+; modified registers: 
+; r11d - stores pointer to the array and the values of elements in that array are modified
+; ecx - counter
+initialize_arrays: 
 		mov ecx, 25	; loop has to run exactly 25 times - counter
 	do_loop: ; loads default values to the array
 		movups [r11d    ], xmm0 ; moves default values stored in xmm0 register to 4 elements from the array
@@ -134,7 +165,21 @@ initialize_arrays: ; fills arrays with default values, uses SIMD instructions
 		loop do_loop	; loop as long as ecx is not equal to 0
 		ret ; return
 
-dijkstraASM proc ; main procedure of the algorithm
+
+; main procedure of the algorithm
+
+; input: 
+; ecx - pointer to the array with distances, int[800]
+; edx - pointer to the visited cells array, int[800]
+; r8 - pointer to the previous element array, int[800]
+; r9 - index of the source cell, int 
+; DWORD PTR[rsp + 48] - index of the destination cell, int 
+; DWORD PTR[rsp + 56]  - length of the array, int 
+
+; output: arrays passed as parameters are filled with values calculated by the algorithm
+
+; modified registers: none
+dijkstraASM proc
 
 initialize: ; initialize the variables and arrays
 
@@ -183,7 +228,7 @@ main_loop: ; main loop of the algorithm
 
 	mov r12d, -1 ; prepare the counter in r12d register
 
-	movups xmm0, [neighbours] ; store the neighbours in the xmm0 register
+	;movups xmm0, [neighbours] ; store the neighbours in the xmm0 register
 
 check_loop: ; check if the distance from the current element to its neighbours is smaller than their current distances, if yes - update the distance and set current cell as previous
 

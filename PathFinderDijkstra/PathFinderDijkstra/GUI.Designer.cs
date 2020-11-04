@@ -40,31 +40,44 @@
             this.netLabel = new System.Windows.Forms.Label();
             this.asmTimeLabel = new System.Windows.Forms.Label();
             this.netTimeLabel = new System.Windows.Forms.Label();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.groupBox4 = new System.Windows.Forms.GroupBox();
+            this.saveDataButton = new System.Windows.Forms.Button();
+            this.loadDataButton = new System.Windows.Forms.Button();
+            this.groupBox5 = new System.Windows.Forms.GroupBox();
+            this.clearSolutionButton = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.mainGrid)).BeginInit();
+            this.groupBox1.SuspendLayout();
+            this.groupBox2.SuspendLayout();
+            this.groupBox3.SuspendLayout();
+            this.groupBox4.SuspendLayout();
+            this.groupBox5.SuspendLayout();
             this.SuspendLayout();
             // 
             // mainGrid
             // 
-            this.mainGrid.Location = new System.Drawing.Point(2, 6);
+            this.mainGrid.Location = new System.Drawing.Point(2, 12);
             this.mainGrid.Name = "mainGrid";
-            this.mainGrid.Size = new System.Drawing.Size(800, 402);
+            this.mainGrid.Size = new System.Drawing.Size(800, 484);
             this.mainGrid.TabIndex = 0;
             this.mainGrid.TabStop = false;
             this.mainGrid.MouseClick += new System.Windows.Forms.MouseEventHandler(this.mainGrid_MouseClick);
             // 
             // clearButton
             // 
-            this.clearButton.Location = new System.Drawing.Point(498, 413);
+            this.clearButton.Location = new System.Drawing.Point(14, 109);
             this.clearButton.Name = "clearButton";
             this.clearButton.Size = new System.Drawing.Size(97, 40);
             this.clearButton.TabIndex = 1;
-            this.clearButton.Text = "Clear";
+            this.clearButton.Text = "Delete Map";
             this.clearButton.UseVisualStyleBackColor = true;
             this.clearButton.Click += new System.EventHandler(this.clearButton_Click);
             // 
             // startButton
             // 
-            this.startButton.Location = new System.Drawing.Point(4, 414);
+            this.startButton.Location = new System.Drawing.Point(8, 19);
             this.startButton.Name = "startButton";
             this.startButton.Size = new System.Drawing.Size(42, 40);
             this.startButton.TabIndex = 2;
@@ -74,7 +87,7 @@
             // 
             // endButton
             // 
-            this.endButton.Location = new System.Drawing.Point(49, 414);
+            this.endButton.Location = new System.Drawing.Point(69, 19);
             this.endButton.Name = "endButton";
             this.endButton.Size = new System.Drawing.Size(42, 40);
             this.endButton.TabIndex = 2;
@@ -84,7 +97,7 @@
             // 
             // wallButton
             // 
-            this.wallButton.Location = new System.Drawing.Point(93, 414);
+            this.wallButton.Location = new System.Drawing.Point(8, 65);
             this.wallButton.Name = "wallButton";
             this.wallButton.Size = new System.Drawing.Size(42, 40);
             this.wallButton.TabIndex = 2;
@@ -94,7 +107,7 @@
             // 
             // eraseButton
             // 
-            this.eraseButton.Location = new System.Drawing.Point(136, 414);
+            this.eraseButton.Location = new System.Drawing.Point(67, 65);
             this.eraseButton.Name = "eraseButton";
             this.eraseButton.Size = new System.Drawing.Size(42, 40);
             this.eraseButton.TabIndex = 2;
@@ -104,7 +117,7 @@
             // 
             // runAlgoButton
             // 
-            this.runAlgoButton.Location = new System.Drawing.Point(601, 414);
+            this.runAlgoButton.Location = new System.Drawing.Point(15, 18);
             this.runAlgoButton.Name = "runAlgoButton";
             this.runAlgoButton.Size = new System.Drawing.Size(96, 39);
             this.runAlgoButton.TabIndex = 3;
@@ -118,33 +131,33 @@
             this.languageComboBox.Items.AddRange(new object[] {
             ".NET",
             "Assembler"});
-            this.languageComboBox.Location = new System.Drawing.Point(703, 414);
+            this.languageComboBox.Location = new System.Drawing.Point(6, 19);
             this.languageComboBox.Name = "languageComboBox";
-            this.languageComboBox.Size = new System.Drawing.Size(99, 21);
+            this.languageComboBox.Size = new System.Drawing.Size(96, 21);
             this.languageComboBox.TabIndex = 4;
             // 
             // asmLabel
             // 
             this.asmLabel.AutoSize = true;
-            this.asmLabel.Location = new System.Drawing.Point(255, 420);
+            this.asmLabel.Location = new System.Drawing.Point(12, 25);
             this.asmLabel.Name = "asmLabel";
-            this.asmLabel.Size = new System.Drawing.Size(55, 13);
+            this.asmLabel.Size = new System.Drawing.Size(36, 13);
             this.asmLabel.TabIndex = 5;
-            this.asmLabel.Text = "Asm time: ";
+            this.asmLabel.Text = "Asm : ";
             // 
             // netLabel
             // 
             this.netLabel.AutoSize = true;
-            this.netLabel.Location = new System.Drawing.Point(250, 440);
+            this.netLabel.Location = new System.Drawing.Point(7, 45);
             this.netLabel.Name = "netLabel";
-            this.netLabel.Size = new System.Drawing.Size(60, 13);
+            this.netLabel.Size = new System.Drawing.Size(41, 13);
             this.netLabel.TabIndex = 6;
-            this.netLabel.Text = ".NET time: ";
+            this.netLabel.Text = ".NET : ";
             // 
             // asmTimeLabel
             // 
             this.asmTimeLabel.AutoSize = true;
-            this.asmTimeLabel.Location = new System.Drawing.Point(316, 420);
+            this.asmTimeLabel.Location = new System.Drawing.Point(54, 25);
             this.asmTimeLabel.Name = "asmTimeLabel";
             this.asmTimeLabel.Size = new System.Drawing.Size(13, 13);
             this.asmTimeLabel.TabIndex = 5;
@@ -153,34 +166,123 @@
             // netTimeLabel
             // 
             this.netTimeLabel.AutoSize = true;
-            this.netTimeLabel.Location = new System.Drawing.Point(316, 440);
+            this.netTimeLabel.Location = new System.Drawing.Point(54, 45);
             this.netTimeLabel.Name = "netTimeLabel";
             this.netTimeLabel.Size = new System.Drawing.Size(13, 13);
             this.netTimeLabel.TabIndex = 6;
             this.netTimeLabel.Text = "0";
             // 
+            // groupBox1
+            // 
+            this.groupBox1.Controls.Add(this.wallButton);
+            this.groupBox1.Controls.Add(this.startButton);
+            this.groupBox1.Controls.Add(this.endButton);
+            this.groupBox1.Controls.Add(this.eraseButton);
+            this.groupBox1.Location = new System.Drawing.Point(808, 207);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(118, 116);
+            this.groupBox1.TabIndex = 7;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "Drawing Options";
+            // 
+            // groupBox2
+            // 
+            this.groupBox2.Controls.Add(this.asmLabel);
+            this.groupBox2.Controls.Add(this.asmTimeLabel);
+            this.groupBox2.Controls.Add(this.netLabel);
+            this.groupBox2.Controls.Add(this.netTimeLabel);
+            this.groupBox2.Location = new System.Drawing.Point(808, 6);
+            this.groupBox2.Name = "groupBox2";
+            this.groupBox2.Size = new System.Drawing.Size(118, 76);
+            this.groupBox2.TabIndex = 8;
+            this.groupBox2.TabStop = false;
+            this.groupBox2.Text = "Execution Times";
+            // 
+            // groupBox3
+            // 
+            this.groupBox3.Controls.Add(this.clearSolutionButton);
+            this.groupBox3.Controls.Add(this.runAlgoButton);
+            this.groupBox3.Controls.Add(this.clearButton);
+            this.groupBox3.Location = new System.Drawing.Point(808, 386);
+            this.groupBox3.Name = "groupBox3";
+            this.groupBox3.Size = new System.Drawing.Size(118, 161);
+            this.groupBox3.TabIndex = 9;
+            this.groupBox3.TabStop = false;
+            this.groupBox3.Text = "Run";
+            // 
+            // groupBox4
+            // 
+            this.groupBox4.Controls.Add(this.saveDataButton);
+            this.groupBox4.Controls.Add(this.loadDataButton);
+            this.groupBox4.Location = new System.Drawing.Point(808, 88);
+            this.groupBox4.Name = "groupBox4";
+            this.groupBox4.Size = new System.Drawing.Size(118, 113);
+            this.groupBox4.TabIndex = 10;
+            this.groupBox4.TabStop = false;
+            this.groupBox4.Text = "Files";
+            // 
+            // saveDataButton
+            // 
+            this.saveDataButton.Location = new System.Drawing.Point(6, 65);
+            this.saveDataButton.Name = "saveDataButton";
+            this.saveDataButton.Size = new System.Drawing.Size(96, 39);
+            this.saveDataButton.TabIndex = 12;
+            this.saveDataButton.Text = "Save Map";
+            this.saveDataButton.UseVisualStyleBackColor = true;
+            this.saveDataButton.Click += new System.EventHandler(this.saveDataBtn_Click);
+            // 
+            // loadDataButton
+            // 
+            this.loadDataButton.Location = new System.Drawing.Point(6, 19);
+            this.loadDataButton.Name = "loadDataButton";
+            this.loadDataButton.Size = new System.Drawing.Size(97, 40);
+            this.loadDataButton.TabIndex = 11;
+            this.loadDataButton.Text = "Load Map";
+            this.loadDataButton.UseVisualStyleBackColor = true;
+            this.loadDataButton.Click += new System.EventHandler(this.loadDataBtn_Click);
+            // 
+            // groupBox5
+            // 
+            this.groupBox5.Controls.Add(this.languageComboBox);
+            this.groupBox5.Location = new System.Drawing.Point(808, 329);
+            this.groupBox5.Name = "groupBox5";
+            this.groupBox5.Size = new System.Drawing.Size(118, 51);
+            this.groupBox5.TabIndex = 11;
+            this.groupBox5.TabStop = false;
+            this.groupBox5.Text = "Select Version";
+            // 
+            // clearSolutionButton
+            // 
+            this.clearSolutionButton.Location = new System.Drawing.Point(14, 63);
+            this.clearSolutionButton.Name = "clearSolutionButton";
+            this.clearSolutionButton.Size = new System.Drawing.Size(97, 40);
+            this.clearSolutionButton.TabIndex = 4;
+            this.clearSolutionButton.Text = "Clear Solution";
+            this.clearSolutionButton.UseVisualStyleBackColor = true;
+            this.clearSolutionButton.Click += new System.EventHandler(this.clearSolutionButton_Click);
+            // 
             // GUI
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(804, 500);
-            this.Controls.Add(this.netTimeLabel);
-            this.Controls.Add(this.netLabel);
-            this.Controls.Add(this.asmTimeLabel);
-            this.Controls.Add(this.asmLabel);
-            this.Controls.Add(this.languageComboBox);
-            this.Controls.Add(this.runAlgoButton);
-            this.Controls.Add(this.eraseButton);
-            this.Controls.Add(this.wallButton);
-            this.Controls.Add(this.endButton);
-            this.Controls.Add(this.startButton);
-            this.Controls.Add(this.clearButton);
+            this.BackColor = System.Drawing.SystemColors.ActiveCaption;
+            this.ClientSize = new System.Drawing.Size(931, 559);
+            this.Controls.Add(this.groupBox5);
+            this.Controls.Add(this.groupBox4);
+            this.Controls.Add(this.groupBox3);
+            this.Controls.Add(this.groupBox2);
+            this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.mainGrid);
             this.Name = "GUI";
             this.Text = "Dijkstra Pathfinder";
             ((System.ComponentModel.ISupportInitialize)(this.mainGrid)).EndInit();
+            this.groupBox1.ResumeLayout(false);
+            this.groupBox2.ResumeLayout(false);
+            this.groupBox2.PerformLayout();
+            this.groupBox3.ResumeLayout(false);
+            this.groupBox4.ResumeLayout(false);
+            this.groupBox5.ResumeLayout(false);
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
@@ -198,6 +300,14 @@
         private System.Windows.Forms.Label netLabel;
         private System.Windows.Forms.Label asmTimeLabel;
         private System.Windows.Forms.Label netTimeLabel;
+        private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.GroupBox groupBox2;
+        private System.Windows.Forms.GroupBox groupBox3;
+        private System.Windows.Forms.GroupBox groupBox4;
+        private System.Windows.Forms.Button saveDataButton;
+        private System.Windows.Forms.Button loadDataButton;
+        private System.Windows.Forms.GroupBox groupBox5;
+        private System.Windows.Forms.Button clearSolutionButton;
     }
 }
 
