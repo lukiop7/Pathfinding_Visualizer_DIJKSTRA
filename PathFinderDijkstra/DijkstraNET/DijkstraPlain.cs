@@ -79,7 +79,7 @@ namespace DijkstraNET
         }
 
         /// <summary>
-        /// Performs the Dijkstra algorithm.
+        /// Performs the Dijkstra algorithm. Fills the arrays with values calculated during the execution of the algorithm.
         /// </summary>
         /// <param name="distances">Array with distances</param>
         /// <param name="visits">Array with informations if the cells were visited</param>
@@ -90,6 +90,23 @@ namespace DijkstraNET
         /// <returns>Index of the destination cell</returns>
         public static int fullAlgorithm(int[] distances, bool[] visits, int[] previous, int source, int destination, int current)
         {
+            distances[source] = 0;
+            visits[source] = true;
+            int[] neighbours_first = DijkstraPlain.GetNeighbours(visits, current);
+            for (int i = 0; i < 4; i++)
+            {
+                int index = neighbours_first[i];
+                if (index != -1)
+                {
+                    int dist = distances[current] + 1;
+                    if (dist < distances[index])
+                    {
+                        distances[index] = dist;
+                        previous[index] = current;
+                    }
+                }
+            }
+
             while (current != destination)
             {
                 current = MinimalDistance(distances, visits);

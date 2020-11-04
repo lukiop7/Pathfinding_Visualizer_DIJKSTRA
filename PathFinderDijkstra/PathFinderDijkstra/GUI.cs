@@ -35,7 +35,10 @@ namespace PathFinderDijkstra
         private PathFinderDijkstra.Grid.Grid inputGrid;
         private bool solved = false;
 
-        public unsafe class NETProxy
+        /// <summary>
+        /// Proxy class for importing the ASM dll
+        /// </summary>
+        public unsafe class ASMProxy
         {
             [DllImport("Asm.dll")]
             public static extern void dijkstraASM(int* distances, int* visits, int* previous, int source, int destination, int len);
@@ -54,6 +57,10 @@ namespace PathFinderDijkstra
             }
 
         }
+
+        /// <summary>
+        /// Constructor.
+        /// </summary>
         public GUI()
         {
             InitializeComponent();
@@ -62,18 +69,31 @@ namespace PathFinderDijkstra
             timer = new Stopwatch();
         }
 
+        /// <summary>
+        /// Initializes grid.
+        /// </summary>
         private void InitializeGrid()
         {
             gridDrawer = new GridDrawer.GridDrawer(mainGrid);
             gridDrawer.Draw();
         }
 
+        /// <summary>
+        /// Handles clearButton click event.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void clearButton_Click(object sender, EventArgs e)
         {
             gridDrawer.Reset();
             inputGrid = null;
         }
 
+        /// <summary>
+        /// Handles mainGrid click event.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void mainGrid_MouseClick(object sender, MouseEventArgs e)
         {
             if (solved)
@@ -83,6 +103,11 @@ namespace PathFinderDijkstra
             gridDrawer.gridClicked(e.X, e.Y, clickType);
         }
 
+        /// <summary>
+        /// Handles startButton click event.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void startButton_Click(object sender, EventArgs e)
         {
             SetInputGrid();
@@ -90,25 +115,44 @@ namespace PathFinderDijkstra
             clickType = CellType.A;
         }
 
-
+        /// <summary>
+        /// Handles endButton click event.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void endButton_Click(object sender, EventArgs e)
         {
             SetInputGrid();
             clickType = CellType.B;
         }
 
+        /// <summary>
+        /// Handles wallButton click event.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void wallButton_Click(object sender, EventArgs e)
         {
             SetInputGrid();
             clickType = CellType.Solid;
         }
 
+        /// <summary>
+        /// Handles eraseButton click event.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void eraseButton_Click(object sender, EventArgs e)
         {
             SetInputGrid();
             clickType = CellType.Empty;
         }
 
+        /// <summary>
+        /// Handles runAlgoButton click event.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void runAlgoButton_Click(object sender, EventArgs e)
         {
             if (gridDrawer.startCell == null || gridDrawer.endCell == null)
@@ -134,9 +178,12 @@ namespace PathFinderDijkstra
             }
         }
 
+        /// <summary>
+        /// Calls the algorithm function from ASM.dll and draws the solution.
+        /// </summary>
         private void asmRun()
         {
-            NETProxy asm = new NETProxy();
+            ASMProxy asm = new ASMProxy();
             int len = 800;
             int source = gridDrawer.GetIndex(gridDrawer.startCell);
             int destination = gridDrawer.GetIndex(gridDrawer.endCell);
@@ -148,6 +195,7 @@ namespace PathFinderDijkstra
 
             for (int i = 0; i < distances.Length; i++)
             {
+                // if current cell is a wall => mark is as visited
                 if (gridDrawer.GetCell(i).type == CellType.Solid)
                     visited[i] = 1;
                 else
@@ -166,7 +214,9 @@ namespace PathFinderDijkstra
 
         }
 
-
+        /// <summary>
+        /// Calls the algorithm function from DijkstraNET.dll and draws the solution.
+        /// </summary>
         private void dotNETRun()
         {
             int source = gridDrawer.GetIndex(gridDrawer.startCell);
@@ -188,42 +238,20 @@ namespace PathFinderDijkstra
                 else
                     visits[i] = false;
             }
-            distances[source] = 0;
-            visits[source] = true;
-            int[] neighbours = DijkstraPlain.GetNeighbours(visits, current);
-            for (int i = 0; i < 4; i++)
-            {
-                int index = neighbours[i];
-                if (index != -1)
-                {
-                    int dist = distances[current] + 1;
-                    if (dist < distances[index])
-                    {
-                        distances[index] = dist;
-                        previous[index] = current;
-                    }
-                }
-            }
-            Cell previousCell = gridDrawer.startCell;
 
             current = DijkstraPlain.fullAlgorithm(distances, visits, previous, source, destination, current);
             timer.Stop();
             netTimeLabel.Text = timer.ElapsedTicks.ToString();
-            //while (current != destination)
-            //{
-            //    var cell =gridDrawer.GetCell(current);
-            //    if (cell != gridDrawer.endCell)
-            //    {
-            //        previousCell.type = CellType.Visited;
-            //        cell.type = CellType.Current;
-            //        current = DijkstraPlain.Run(distances, visits, previous, source, destination, current);
-            //        previousCell = cell;
-            //    }
-            //    gridDrawer.Draw();
-            //}
+
             draw_solution(previous, current, source);
         }
 
+        /// <summary>
+        /// Draws the solution on the grid
+        /// </summary>
+        /// <param name="previous">array with predecessors</param>
+        /// <param name="current">index of the current cell</param>
+        /// <param name="source">index of the source</param>
         private void draw_solution(int[] previous, int current, int source)
         {
             var cell = gridDrawer.GetCell(current);
@@ -247,7 +275,9 @@ namespace PathFinderDijkstra
             solved = true;
         }
 
-
+        /// <summary>
+        /// Resets the input grid.
+        /// </summary>
         private void SetInputGrid()
         {
             if (inputGrid != null)
@@ -267,6 +297,11 @@ namespace PathFinderDijkstra
             }
         }
 
+        /// <summary>
+        /// Handles loadDataButton click event.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void loadDataBtn_Click(object sender, EventArgs e)
         {
             clearButton_Click(null,null);
@@ -314,6 +349,11 @@ namespace PathFinderDijkstra
             }
         }
 
+        /// <summary>
+        /// Handles saveDataButton click event.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void saveDataBtn_Click(object sender, EventArgs e)
         {
 
@@ -355,6 +395,11 @@ namespace PathFinderDijkstra
             }
         }
 
+        /// <summary>
+        /// Handles clearSolutionButton click event.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void clearSolutionButton_Click(object sender, EventArgs e)
         {
             if (inputGrid != null)
